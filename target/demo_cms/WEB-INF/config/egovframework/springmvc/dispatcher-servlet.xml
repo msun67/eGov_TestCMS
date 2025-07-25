@@ -13,6 +13,13 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
     
+        <!-- JSON 메시지 컨버터 등록 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    
     <!-- 파일업로드처리 빈 등록 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	    <property name="maxUploadSize" value="41943040"/> <!-- 40MB -->
@@ -68,5 +75,7 @@
 
     <mvc:view-controller path="/cmmn/validator.do" view-name="cmmn/validator"/>
     <import resource="classpath:/egovframework/spring/context-mapper.xml"/>
+    
+
 
 </beans>

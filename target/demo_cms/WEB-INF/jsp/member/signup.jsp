@@ -79,8 +79,8 @@
       width: 100%;
       margin-top: 16px;
     }
-  </style>
-<!--  onsubmit="return validateForm();" -->
+</style>
+
 <div class ="container">
 	<h2>회원가입</h2>
 	<form action="${pageContext.request.contextPath}/signupProcess.do" method="post">
@@ -226,30 +226,49 @@
 		return isValid;
 	}
 	
+	//아이디 중복 검사와 중복 검사하지 않았을 때 가입 버튼 비활성화
+ 	//JSP의 Context Path(프로젝트 경로)를 가져옴
+ 	<%--
+ 	 표현식 오해를 피하기 위해 <%= >% 앞뒤 꼭 띄어쓰기하기
+ 	 JSP의 경우 주석 내용도 조심할 것!!!! 주석 코드도 읽어버리는 경우 발생 
+ 	--%>
+ 	
+	
+    
+    /* 아이디 중복 체크 및 가입 완료시 아이디 중복 체크 여부 확인 */
 	function checkUserId() {
-	    const userId = document.getElementById("userId").value;
+		const userId = document.getElementById("userId").value.trim();
 	    const userType = document.querySelector('input[name="userType"]:checked').value;
-	    
-	    if (!userId || !userType) {
-	        alert("아이디 또는 권한을 선택하세요.");
-	        return;
-	    }
+	    const resultSpan = document.getElementById("idCheckResult");
+	    const submitBtn = document.getElementById("submitBtn");
+	    const ctx = '<%= request.getContextPath() %>';
 
-	    fetch("/demo_cms/checkUserId?userId=" + encodeURIComponent(userId) + "&userType=" + encodeURIComponent(userType))
-	        .then(res => res.json())
-	        .then(data => {
-	            if (data) {
-	                document.getElementById("idCheckResult").innerText = "✅ 사용 가능한 아이디입니다.";
-	                document.getElementById("submitBtn").disabled = false;
-	            } else {
-	                document.getElementById("idCheckResult").innerText = "❌ 이미 사용 중인 아이디입니다.";
-	                document.getElementById("submitBtn").disabled = true;
+	    console.log("🔍 userType =", userType); // 반드시 확인
+
+	    fetch(ctx + "/checkUserId.do?userId=" + encodeURIComponent(userId) + "&userType=" + encodeURIComponent(userType))
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error("❌ 서버 응답 오류! status=" + response.status);
 	            }
+	            return response.json(); // JSON 응답 파싱
+	        })
+	        .then(result => {
+	            if (result.available === false) {
+	                resultSpan.innerText = "이미 사용 중인 아이디입니다.";
+	                resultSpan.style.color = "red";
+	                submitBtn.disabled = true;
+	            } else {
+	                resultSpan.innerText = "사용 가능한 아이디입니다.";
+	                resultSpan.style.color = "green";
+	                submitBtn.disabled = false;
+	            }
+	        })
+	        .catch(error => {
+	            alert("서버 오류가 발생했습니다.");
+	            console.error("❗️ fetch 오류:", error);
+	            submitBtn.disabled = true;
 	        });
 	}
-	
-	
-
 
 </script>
 </html>

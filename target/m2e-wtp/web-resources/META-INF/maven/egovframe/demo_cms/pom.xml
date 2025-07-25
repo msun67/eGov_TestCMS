@@ -199,12 +199,34 @@
 		  <version>4.13.2</version>
 		  <scope>test</scope>
 		</dependency>
+		
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>4.13.0</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- Jackson Core -->
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-core</artifactId>
+		  <version>2.9.10</version>
+		</dependency>
+		
+		<!-- Jackson Databind (ObjectMapper 등 핵심) -->
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+		  <version>2.9.10.8</version> <!-- CVE 대응된 마지막 패치 버전 -->
+		</dependency>
+		
+		<!-- Jackson Annotations (선택사항이지만 함께 추천) -->
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-annotations</artifactId>
+		  <version>2.9.10</version>
+		</dependency>
        <!-- <dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>yasson</artifactId>

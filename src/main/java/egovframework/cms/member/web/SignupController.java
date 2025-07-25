@@ -48,6 +48,7 @@ public class SignupController {
     public Map<String, Boolean> checkUserId(@RequestParam("userId") String userId,
             								@RequestParam("userType") String userType) {
     	logger.info("👉 userId={}, userType={}", userId, userType);
+    	
 		int userTypeInt = mapRoleToUserType(userType); // ADMIN:0, USER:1, ORG:2
 		boolean available = userSignupService.isUserIdAvailable(userId, userTypeInt);
 		Map<String, Boolean> result = new HashMap<>();
@@ -56,6 +57,7 @@ public class SignupController {
 		}
 
 	private int mapRoleToUserType(String userType) {
+		logger.info("mapRoleToUserType 진입: {}", userType);
 		switch (userType) {
         case "ROLE_ADMIN": return 0;
         case "ROLE_USER": return 1;

@@ -18,7 +18,7 @@
     </insert>
     
     <!-- user_detail테이블에서 ID중복확인 -->
-    <select id="countByUserIdAndType" parameterType="map" resultType="int">
+    <select id="countByUserIdAndType" parameterType="java.util.Map" resultType="int">
 	    SELECT COUNT(*) 
 	    FROM user_details 
 	    WHERE user_id = #{userId}

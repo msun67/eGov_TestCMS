@@ -17,14 +17,14 @@
 		<intercept-url pattern="/loginProcess.do" access="permitAll"/>
 		<intercept-url pattern="/signup.do" access="permitAll"/>	
 		<intercept-url pattern="/signupProcess.do" access="permitAll"/>	
-		<intercept-url pattern="/checkUserId" access="permitAll"/>
+		<intercept-url pattern="/checkUserId.do" access="permitAll"/>
 		
 		<!-- 관리자-->
-		<intercept-url pattern="/admin/**" access="hasRole('ADMIN')"/>		
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>		
 		<!-- 조직원-->
-		<intercept-url pattern="/org/**" access="hasRole('ORG')"/>		
+		<intercept-url pattern="/org/**" access="hasRole('ROLE_ORG')"/>		
 		<!-- 일반-->
-		<intercept-url pattern="/user/**" access="hasRole('USER')"/>
+		<intercept-url pattern="/user/**" access="hasRole('ROLE_USER')"/>
 		<!-- 나머지-->
 		<intercept-url pattern="/**" access="isAuthenticated()"/>
 
