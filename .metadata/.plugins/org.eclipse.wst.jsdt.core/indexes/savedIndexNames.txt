@@ -1,6 +1,0 @@
-INDEX VERSION 1.4+D:\eGov4.3.0\workspace\demo_cms\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-2431174710.index
-1671160548.index
-2334771471.index
-635935210.index
-3059262054.index
