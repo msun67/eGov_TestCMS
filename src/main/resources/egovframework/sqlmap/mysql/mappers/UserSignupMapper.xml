@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.cms.member.service.impl.UserSignupMapper">
+
+	<!-- 회원가입시 user테이블에 선등록 -->
+    <insert id="insertUsers" parameterType="SignupVO" useGeneratedKeys="true" keyProperty="userNo">
+        INSERT INTO users (user_uuid, login_status)
+        VALUES (#{userUuid}, 1)
+    </insert>
+
+	<!-- 이후 user_details테이블에 user테이블 정보를 가지고 후등록-->
+    <insert id="insertUserDetails" parameterType="SignupVO">
+        INSERT INTO user_details (
+            user_no, user_uuid, user_id, password, name, user_type, phone, mobile, address, residence
+        ) VALUES (
+            #{userNo}, #{userUuid}, #{userId}, #{password}, #{name}, #{userType},#{phone},#{mobile},#{address}, #{residence}
+        )
+    </insert>
+    
+    <!-- user_detail테이블에서 ID중복확인 -->
+    <select id="countByUserIdAndType" parameterType="map" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM user_details 
+	    WHERE user_id = #{userId}
+	    AND user_type = #{userType}
+	</select>
+</mapper>

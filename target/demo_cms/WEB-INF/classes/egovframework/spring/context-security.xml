@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security 
+        http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+	<!-- 페이지 권한 설정 -->
+	<http auto-config="true" use-expressions="true">
+		<!-- 로그인 페이지, 회원가입페이지는 모두 허용 -->
+		<intercept-url pattern="/main.do" access="permitAll"/>
+		<intercept-url pattern="/loginProcess.do" access="permitAll"/>
+		<intercept-url pattern="/signup.do" access="permitAll"/>	
+		<intercept-url pattern="/signupProcess.do" access="permitAll"/>	
+		<intercept-url pattern="/checkUserId" access="permitAll"/>
+		
+		<!-- 관리자-->
+		<intercept-url pattern="/admin/**" access="hasRole('ADMIN')"/>		
+		<!-- 조직원-->
+		<intercept-url pattern="/org/**" access="hasRole('ORG')"/>		
+		<!-- 일반-->
+		<intercept-url pattern="/user/**" access="hasRole('USER')"/>
+		<!-- 나머지-->
+		<intercept-url pattern="/**" access="isAuthenticated()"/>
+
+		<!-- 로그인/로그아웃/권한처리  -->
+		<form-login login-page="/main.do"
+					login-processing-url="/loginProcess.do"
+					default-target-url="/board.do"
+					authentication-failure-url="/main.do?error=true"/>
+					<!-- 첫 회원가입 후 로그인시 
+					http://localhost:8080/demo_cms/checkUserId?userId=test
+					로 URL 튀는 현상때문에 임시 주석-->
+					<!--username-parameter="username"
+					password-parameter="password"-->
+					
+		<logout logout-url="/logout.do" logout-success-url="/main.do" invalidate-session="true"/>
+		<csrf disabled="true" />
+	</http>
+	
+	<!-- 비밀번호 암호화 방식 (BCrypt) -->
+	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	<!-- 인증 처리 provider -->
+	<authentication-manager>
+		<authentication-provider user-service-ref="userLoginService">
+		<password-encoder ref="passwordEncoder"/>
+		</authentication-provider>
+	</authentication-manager>
+
+
+</beans:beans>
