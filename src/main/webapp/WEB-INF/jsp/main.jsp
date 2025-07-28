@@ -88,25 +88,17 @@
 			
 			<input type="text" name="username" id="userId" placeholder="아이디" required/><br/>
 			<input type="password" name="password" id="password" placeholder="비밀번호" required/><br/>
+			
 			<button type="submit">로그인</button>
 			<!-- 회원가입 -->
 			<a href="<c:url value='/signup.do'/>" class="link">회원가입 </a>
-		</form>
-	
-		
+		</form>		
 
 		<!-- 오류 메시지 출력 -->
 		<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-			<p style="color:red;">${SPRING_SECURITY_LAST_EXCEPTION.message}</p>
+			<p style="color:red;">❌ ${SPRING_SECURITY_LAST_EXCEPTION}</p>
+			<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
 		</c:if>
-		<!-- 로그인 실패 시 메시지 출력 -->
-	    <c:if test="${param.error == 'true'}">
-	        <p style="color:red;">❌ 아이디 또는 비밀번호가 잘못되었습니다.</p>
-	    </c:if>
-	    
-	    <a class="link" style="color:#898989;" href="/demo_cms/board.do">게시판 목록 보기</a>
-	    <a class="link" style="color:#898989;" href="/demo_cms/boardMaster/create.do">게시판 생성 하기</a>
-	</div>
-		
+	</div>		
 </body>
 </html>

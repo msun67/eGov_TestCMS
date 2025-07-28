@@ -6,7 +6,8 @@ public class SignupVO {
     private String userId;
     private String password;
     private String name;
-    private int userType;
+    private int userType;		// DB 저장용
+    private String userTypeStr; // form 전달용 (ex. "ROLE_USER")
     private String phone;
     private String mobile;
     private String address;
@@ -47,6 +48,13 @@ public class SignupVO {
 	}
 	public void setUserType(int userType) {
 		this.userType = userType;
+	}
+	
+	public String getUserTypeStr() {
+		return userTypeStr;
+	}
+	public void setUserTypeStr(String userTypeStr) {
+		this.userTypeStr = userTypeStr;
 	}
 	public String getPhone() {
 		return phone;

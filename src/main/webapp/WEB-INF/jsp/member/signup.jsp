@@ -86,9 +86,9 @@
 	<form action="${pageContext.request.contextPath}/signupProcess.do" method="post">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	
-		<input type="radio" name="userType" value="ROLE_ADMIN"> 관리자
-		<input type="radio" name="userType" value="ROLE_USER" checked> 일반 사용자
-		<input type="radio" name="userType" value="ROLE_ORG"> 부서원
+		<input type="radio" name="userTypeStr" value="ROLE_ADMIN"> 관리자
+		<input type="radio" name="userTypeStr" value="ROLE_USER" checked> 일반 사용자
+		<input type="radio" name="userTypeStr" value="ROLE_ORG"> 부서원
 	
 		<label for="userId">아이디</label>
 		<div class="btn-row">
@@ -148,7 +148,7 @@
 	});
 
 	document.getElementById("password").addEventListener("blur", () => {
-	    validateFormCommon("password", "passwordError", /^.{8,}$/, "비밀번호는 8자 이상이어야 합니다.");
+	    validateFormCommon("password", "passwordError", /^.{6,}$/, "비밀번호는 6자 이상이어야 합니다.");
 	});
 	
 	document.getElementById("phone").addEventListener("blur", () => {
@@ -193,8 +193,8 @@
 		}
 		
 		//비밀번호 형식 체크
-		if (password.length < 8) {
-			document.getElementById("passwordError").innerText = "비밀번호는 8자 이상이어야 합니다.";
+		if (password.length < 6) {
+			document.getElementById("passwordError").innerText = "비밀번호는 6자 이상이어야 합니다.";
 			isValid = false;
 		}
 		
@@ -238,12 +238,12 @@
     /* 아이디 중복 체크 및 가입 완료시 아이디 중복 체크 여부 확인 */
 	function checkUserId() {
 		const userId = document.getElementById("userId").value.trim();
-	    const userType = document.querySelector('input[name="userType"]:checked').value;
+	    const userType = document.querySelector('input[name="userTypeStr"]:checked').value;
 	    const resultSpan = document.getElementById("idCheckResult");
 	    const submitBtn = document.getElementById("submitBtn");
 	    const ctx = '<%= request.getContextPath() %>';
 
-	    console.log("🔍 userType =", userType); // 반드시 확인
+	    console.log("🔍 userType =", userType);
 
 	    fetch(ctx + "/checkUserId.do?userId=" + encodeURIComponent(userId) + "&userType=" + encodeURIComponent(userType))
 	        .then(response => {

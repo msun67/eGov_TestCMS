@@ -30,7 +30,7 @@ public class LoginVO implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(() -> "ROLE_" + getRoleNameByType(userType));
+        return Collections.singleton(() -> getRoleNameByType(userType));
     }
 
     private String getRoleNameByType(int userType) {

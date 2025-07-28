@@ -3,6 +3,7 @@ package egovframework.cms.member.web;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +38,14 @@ public class SignupController {
     // 회원가입 완료 후 처리
     @PostMapping("/signupProcess.do")
     public String signupProcess(@ModelAttribute SignupVO signupVO) throws Exception {
-    	System.out.println("✅ signupProcess 진입");
-    	userSignupService.register(signupVO);
+        System.out.println("✅ signupProcess 진입");
+
+        // userType (String → int 변환)
+        String roleType = signupVO.getUserTypeStr(); // ex) ROLE_USER
+        int userTypeInt = mapRoleToUserType(roleType);
+        signupVO.setUserType(userTypeInt);
+
+        userSignupService.register(signupVO);
         return "redirect:/main.do";
     }
     

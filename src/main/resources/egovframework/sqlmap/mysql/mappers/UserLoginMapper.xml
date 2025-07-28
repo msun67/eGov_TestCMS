@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egovframework.cms.member.security.service.impl.UserLoginMapper">
+
+<resultMap id="loginResultMap" type="egovframework.cms.member.security.LoginVO">
+    <result column="user_id" property="userId"/>
+    <result column="password" property="password"/>
+    <result column="user_type" property="userType"/>
+</resultMap>
+
+    <!-- 스프링 시큐리티 기본 용도 -->
     <select id="findAccount" parameterType="string" resultType="egovframework.cms.member.security.LoginVO">
         SELECT
             user_id AS userId,
             password,
             user_type AS userType
         FROM user_details
-        WHERE user_id = #{username}
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- 스프링 시큐리티 커스텀 로그인시 ID+PW+Type -->
+    <select id="findAccountWithType"  parameterType="map" resultMap="loginResultMap">
+        SELECT
+            user_id AS userId,
+            password,
+            user_type AS userType
+        FROM user_details
+        WHERE user_id = #{userId}
+        AND user_type = #{userType}
     </select>
 </mapper>
