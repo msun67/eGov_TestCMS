@@ -34,6 +34,8 @@ public class UserLoginServiceImpl implements UserDetailsService{
         if (user == null) {
             throw new UsernameNotFoundException("ID 또는 권한이 올바르지 않습니다.");
         }
+        System.out.println("✅ loadUserByUsername userType = " + user.getUserType());
+        
         return user;
     }
 

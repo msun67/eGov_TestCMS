@@ -42,15 +42,7 @@
 	    <a class="link" style="color:#898989;" href="/demo_cms/boardMaster/create.do">게시판 생성 하기</a>
         <!--<a class="link" style="color:#898989;" href="/demo_cms/board.do">게시판 목록 보기</a>
          <a href="/demo_cms/main.do">메인으로</a> -->
-        
-       <p>✅ 로그인 성공!</p>
-	   <p>환영합니다, <strong>${pageContext.request.userPrincipal.name}</strong>님 👋</p>
-	   <p>현재 권한: 
-	       <c:forEach var="auth" items="${pageContext.request.userPrincipal.authorities}">
-	           ${auth.authority}
-	       </c:forEach>
-	   </p>
-        
+              
         <!-- 검색 폼 -->
         <form method="get" action="/demo_cms/board.do">
             <input type="hidden" name="boardCode" value="${boardCode}" />

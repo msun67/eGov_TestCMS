@@ -3,6 +3,7 @@
     xmlns="http://www.springframework.org/schema/security"
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:security="http://www.springframework.org/schema/security"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -28,8 +29,8 @@
         <!-- 🔹 form-login 대신 Custom Filter 사용 -->
         <custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter"/>
 
-        <logout logout-url="/logout.do" logout-success-url="/main.do" invalidate-session="true"/>
-        <csrf disabled="true"/>
+        <logout logout-url="/logout.do" logout-success-url="/main.do" invalidate-session="true"  delete-cookies="JSESSIONID"/>
+        <csrf disabled="false"/>
     </http>
 
     <!-- 🔹 로그인 페이지 (비로그인 사용자가 접근 시) -->
@@ -69,6 +70,9 @@
     <beans:bean id="customAuthSuccessHandler"
                 class="egovframework.cms.member.security.handler.CustomAuthSuccessHandler"/>
     <beans:bean id="customAuthFailureHandler"
-                class="egovframework.cms.member.security.handler.CustomAuthFailureHandler"/>
+                class="egovframework.cms.member.security.handler.CustomAuthFailureHandler"/>  
+                
+    <!-- JSP에서 권한 검사 <sec:authorize> 태그 활성화-->            
+    <security:global-method-security secured-annotations="enabled" />            
 
 </beans:beans>

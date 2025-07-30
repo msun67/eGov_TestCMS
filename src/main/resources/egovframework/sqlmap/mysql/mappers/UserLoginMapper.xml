@@ -11,9 +11,9 @@
     <!-- 스프링 시큐리티 기본 용도 -->
     <select id="findAccount" parameterType="string" resultType="egovframework.cms.member.security.LoginVO">
         SELECT
-            user_id AS userId,
+            user_id,
             password,
-            user_type AS userType
+            user_type
         FROM user_details
         WHERE user_id = #{userId}
     </select>
@@ -21,9 +21,9 @@
     <!-- 스프링 시큐리티 커스텀 로그인시 ID+PW+Type -->
     <select id="findAccountWithType"  parameterType="map" resultMap="loginResultMap">
         SELECT
-            user_id AS userId,
+            user_id,
             password,
-            user_type AS userType
+            user_type
         FROM user_details
         WHERE user_id = #{userId}
         AND user_type = #{userType}
