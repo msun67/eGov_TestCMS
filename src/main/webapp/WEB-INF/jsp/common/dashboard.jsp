@@ -132,14 +132,7 @@
                 <div class="card-foot">노출 상태</div>
             </div>
         </section>
-
-        <!-- 빠른 액션 -->
-        <section class="quick-actions">
-            <a class="btn primary" href="<c:url value='/write.do'/>">새 글쓰기</a>
-            <a class="btn" href="<c:url value='/board/master/create.do'/>">게시판 생성</a>
-            <a class="btn" href="<c:url value='/files/manage.do'/>">첨부파일 관리</a>
-        </section>
-
+        
         <!-- 최근 게시글 (boardRecent: List<BoardPostVO>) -->
         <section class="panel">
             <div class="panel-head">
@@ -170,7 +163,7 @@
                         <tr>
                             <td><c:out value="${post.postNo}"/></td>
                             <td class="title">
-                                <a href="<c:url value='/board/detail.do'>
+                                <a href="<c:url value='/detail.do'>
                                            <c:param name='post_no' value='${post.postNo}'/>
                                            <c:param name='board_code' value='${post.boardCode}'/>
                                          </c:url>">
@@ -203,7 +196,7 @@
                 <ul class="list">
                     <c:forEach var="n" items="${noticeList}" end="4">
                         <li>
-                            <a href="<c:url value='/board/detail.do'>
+                            <a href="<c:url value='/detail.do'>
                                       <c:param name='post_no' value='${n.postNo}'/>
                                       <c:param name='board_code' value='${n.boardCode}'/>
                                     </c:url>">

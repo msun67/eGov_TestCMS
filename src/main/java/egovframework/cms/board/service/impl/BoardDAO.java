@@ -45,4 +45,9 @@ public interface BoardDAO {
     List<BoardFileVO>getFilesByIds(List<Integer> fileIds);
     
     List<Integer> getFileIdsByBoardId(int boardId);
+    
+    
+    
+    // 대시보드용 
+	int countAllPosts();
 }

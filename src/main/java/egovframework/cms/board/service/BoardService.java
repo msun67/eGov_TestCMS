@@ -15,4 +15,7 @@ public interface BoardService {
     BoardVO getPrevPost(String createdAt, String boardCode);
     BoardVO getNextPost(String createdAt, String boardCode);
     
+    
+    //대시보드용
+    int countAllPosts();    
 }

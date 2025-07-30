@@ -92,6 +92,6 @@
 </form>
 
 <a href="/demo_cms/boardMaster/list.do" class="back-link">← 게시판 목록보기</a>
-<a href="/demo_cms/main.do" class="back-link">← 메인으로 돌아가기</a>
+<a href="/demo_cms/dashboard.do" class="back-link">← 이전으로</a>
 </body>
 </html>

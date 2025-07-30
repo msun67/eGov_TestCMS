@@ -122,4 +122,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public List<Integer> getFileIdsByBoardId(int boardId) {
 	    return sqlSession.selectList(namespace + ".getFileIdsByBoardId", boardId);
 	}
+
+	
+	// 대시보드용
+	@Override
+	public int countAllPosts() {
+		return sqlSession.selectOne(namespace + ".countAllPosts");
+	}
 }

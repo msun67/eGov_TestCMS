@@ -89,4 +89,12 @@ public class BoardServiceImpl implements BoardService{
     public BoardVO getNextPost(String createdAt, String boardCode) {
         return boardDAO.getNextPost(createdAt, boardCode);
     }
+    
+    
+    // 대시보드용
+    @Override
+	public int countAllPosts() {
+	    return boardDAO.countAllPosts();
+	}
+    
 }

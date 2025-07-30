@@ -204,4 +204,13 @@
 	<select id="getFileIdsByBoardId" parameterType="int" resultType="int">
 	    SELECT file_id FROM board_file WHERE board_id = #{boardId}
 	</select>
+	
+	
+	
+	<!-- 대시보드: 전체 게시글 수 (삭제 제외, 필터 없음) -->
+	<select id="countAllPosts" resultType="int">
+	    SELECT COUNT(*)
+	    FROM board_post
+	    WHERE is_deleted = FALSE
+	</select>
 </mapper>
