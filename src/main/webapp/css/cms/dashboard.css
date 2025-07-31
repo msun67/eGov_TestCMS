@@ -55,9 +55,9 @@
 .card {
     border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; background: #fff;
 }
-.card-title { font-size: 13px; color: #6b7280; }
+.card-title { font-size: 13px; color: #3b82f6; }
 .card-value { font-size: 28px; font-weight: 700; margin: 6px 0; }
-.card-foot { font-size: 12px; color: #3b82f6 }
+.card-foot { font-size: 12px; color: #9ca3af; }
 
 /* === 공통 가터 값을 하나로 통일 === */
 :root { --panel-gutter: 14px; }
@@ -85,11 +85,11 @@
 
 /* 테이블: 좌우 여백을 첫/마지막 셀에서만 적용해 헤더와 정확히 정렬 */
 .table-wrap { padding: 0 0 12px 0; }
-.table { width: 100%; border-collapse: collapse; }
+.table { width: 100%; border-collapse: collapse; table-layout: fixed;}
 .table thead th {
-    text-align: left; background: #f9fafb; color: #6b7280; padding: 10px; font-weight: 600; border-bottom: 1px solid #e5e7eb;
+    text-align: center; background: #f9fafb; color: #6b7280; padding: 10px; font-weight: 600; border-bottom: 1px solid #e5e7eb;
 }
-.table tbody td { padding: 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.table tbody td { text-align: center; padding: 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; text-overflow: ellipsis;  white-space: nowrap;}
 .table tbody tr:hover { background: #f9fafb; }
 .table .title a { color: #111827; text-decoration: none; }
 .table .title a:hover { text-decoration: underline; }

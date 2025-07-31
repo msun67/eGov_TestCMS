@@ -21,7 +21,9 @@
         <div class="board-detail-container">
             <h1 class="board-title">게시글 등록</h1>
             
-            <form action="write.do" method="post" enctype="multipart/form-data" onsubmit="return submitForm();">
+            <form action="<c:url value='/write.do'/>" method="post" enctype="multipart/form-data" onsubmit="return submitForm();">
+            <!-- ✅ CSRF 토큰 (Spring Security 태그) -->
+    		<sec:csrfInput/>
 
                 <table class="board-table">
                     <tr>
@@ -73,14 +75,14 @@
             </form>
 
 <!-- 스마트에디터 -->            
-<script src="/demo_cms/resources/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script src="<c:url value='/resources/smarteditor/js/HuskyEZCreator.js'/>" charset="utf-8"></script>
 <script>
 	let oEditor = [];
 	
 	nhn.husky.EZCreator.createInIFrame({
 	    oAppRef: oEditor,
 	    elPlaceHolder: "boardContent", // textarea ID
-	    sSkinURI: "/demo_cms/resources/smarteditor/SmartEditor2Skin.html",
+	    sSkinURI: "<c:url value='/resources/smarteditor/SmartEditor2Skin.html'/>",
 	    fCreator: "createSEditor2"
 	});
 

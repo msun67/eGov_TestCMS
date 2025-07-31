@@ -24,7 +24,7 @@
 	            <a href="<c:url value='/dashboard.do'/>">🏠 대시보드</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/profile.do') ? 'active' : ''}">
-	            <a href="<c:url value='/profile.do'/>">🙋‍♂️ 내 정보</a>
+	            <a href="<c:url value=''/>">🙋‍♂️ 내 정보</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/board.do') ? 'active' : ''}">
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
@@ -162,7 +162,7 @@
                     <c:forEach var="post" items="${boardRecent}">
                         <tr>
                             <td><c:out value="${post.boardId}"/></td>
-                            <td class="title">
+                            <td class="title" style="text-align:left;">
                                 <a href="<c:url value='/detail.do'>
                                            <c:param name='boardId' value='${post.boardId}'/>
                                            <c:param name='boardCode' value='${post.boardCode}'/>

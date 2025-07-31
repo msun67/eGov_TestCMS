@@ -2,7 +2,7 @@
 table {
     width: 80%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 15px;
     table-layout: fixed;
 }
 table th{
@@ -15,7 +15,6 @@ table th{
 table td {
     border-bottom: 1px solid #ccc;
     padding: 10px;
-    text-align: center;
     word-wrap: break-word; /* 내용 줄바꿈 허용 */
     overflow: hidden;
     text-overflow: ellipsis; /* 긴 내용 ... 표시 */
@@ -47,4 +46,59 @@ form select, form input, form button {
     padding: 40px 0;
     color: #999;
     font-size: 16px;
+}
+
+/* 가터 변수(대시보드와 동일) */
+:root { --panel-gutter: 14px; }
+
+.board-toolbar{
+  display: flex; align-items: center; justify-content: space-between;
+}
+.btn.primary{
+  background:#3169c4; color:#fff; border:1px solid #3169c4;
+  border-radius:8px; font-weight:600;
+   padding: 7px 10px; font-size: 13px;
+}
+.btn.primary:hover{ filter:brightness(.95); }
+
+/* 오른쪽 검색 영역: 남는 공간 차지 + 우측 정렬 */
+.board-actions{
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* 폼 내부 정렬/간격 */
+.board-actions-form{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+}
+
+/* 인풋/버튼 높이 통일(선택) */
+.board-actions select,
+.board-actions input[type="text"],
+.board-actions button{
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+.board-actions button:hover{ background: #f3f4f6; }
+
+/* (사용 중이면) table-wrap은 좌우 패딩 없이 */
+.table-wrap { 
+  display: block;
+  width: 100%;
+  padding: 0;             /* 좌우 가터는 셀에서 처리 */
+  overflow-x: auto;
+  box-sizing: border-box; }
+
+@media (max-width: 1024px){
+  .layout-container{ grid-template-columns: 1fr; }
+  .side-menu{ order: 2; }
+  .main-content{ order: 1; padding-top: 56px; }
 }

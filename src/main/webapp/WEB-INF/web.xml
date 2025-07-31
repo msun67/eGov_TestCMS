@@ -3,18 +3,25 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
 	<display-name>egov.sample</display-name>
-	
-	<!-- multipart filter 추가 -->
+
+	<!-- 인코딩 필터 -->
 	<filter>
-		<display-name>springMultipartFilter</display-name>
-		<filter-name>springMultipartFilter</filter-name>
-		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
-		<filter-name>springMultipartFilter</filter-name>
+		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
+	</filter-mapping> 
+		
 	<!-- Spring Security 필터 등록 -->
 	<filter>
 	    <filter-name>springSecurityFilterChain</filter-name>
@@ -24,20 +31,6 @@
 	    <filter-name>springSecurityFilterChain</filter-name>
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	<!-- 인코딩 필터 -->
-	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>utf-8</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
-		<url-pattern>*.do</url-pattern>
-	</filter-mapping> 
 	
 	<!--HTML 태그 필터 -->   
 	<filter>
@@ -70,6 +63,14 @@
 			<param-value>/WEB-INF/config/egovframework/springmvc/dispatcher-servlet.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<!-- ✅ 멀티파트 활성화 -->
+	    <multipart-config>
+	        <!-- 개별 파일 최대(10MB) -->
+	        <max-file-size>10485760</max-file-size>
+	        <!-- 전체 요청 최대(40MB) -->
+	        <max-request-size>41943040</max-request-size>
+	        <file-size-threshold>0</file-size-threshold>
+	    </multipart-config>
 	</servlet>
 
      <servlet-mapping>

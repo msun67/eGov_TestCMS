@@ -9,6 +9,12 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/security 
         http://www.springframework.org/schema/security/spring-security.xsd">
+        
+    <!-- 정적 자원은 필터 체인 인증 제외 (네이버스마트에디터) -->
+   	<http pattern="/resources/**" security="none"/>
+	<http pattern="/css/**"       security="none"/>
+	<http pattern="/js/**"        security="none"/>
+	<http pattern="/images/**"    security="none"/>
 
     <!-- 🔹 접근 권한 설정 -->
     <http auto-config="false" use-expressions="true" entry-point-ref="authenticationEntryPoint">
