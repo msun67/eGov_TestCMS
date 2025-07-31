@@ -1,5 +1,6 @@
 package egovframework.cms.board.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -129,4 +130,21 @@ public class BoardDAOImpl implements BoardDAO {
 	public int countAllPosts() {
 		return sqlSession.selectOne(namespace + ".countAllPosts");
 	}
+	@Override
+    public List<BoardVO> selectRecentByBoardCode(String boardCode, int limit) {
+        Map<String, Object> p = new HashMap<>();
+        p.put("boardCode", boardCode);
+        p.put("limit", limit);
+        return sqlSession.selectList(namespace + ".selectRecentByBoardCode", p);
+    }
+	 @Override
+	 public int countTodayPosts() {
+        return sqlSession.selectOne(namespace + ".countTodayPosts");
+    }
+	@Override
+    public List<BoardVO> selectRecentWithFileCount(int limit) {
+        Map<String, Object> p = new HashMap<>();
+        p.put("limit", limit);
+        return sqlSession.selectList(namespace + ".selectRecentWithFileCount", p);
+    }
 }

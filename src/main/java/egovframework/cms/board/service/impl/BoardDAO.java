@@ -50,4 +50,7 @@ public interface BoardDAO {
     
     // 대시보드용 
 	int countAllPosts();
+	List<BoardVO> selectRecentByBoardCode(String boardCode, int limit);
+	int countTodayPosts();
+	List<BoardVO> selectRecentWithFileCount(int limit);
 }

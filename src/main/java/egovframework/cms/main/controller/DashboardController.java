@@ -2,6 +2,7 @@ package egovframework.cms.main.controller;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import egovframework.cms.board.service.BoardService;
+import egovframework.cms.board.service.BoardVO;
 import egovframework.cms.member.security.LoginVO;
 
 @Controller
@@ -33,15 +35,24 @@ public class DashboardController {
                 request.setAttribute("userType", userType); // EL에서 바로 접근 가능
                 //System.out.println("✅ DashboardController userType = " + userType);
             }
-        }
+        }        
         
-     // ✅ 전체 게시글 수 조회
+        // ✅ dashboard.jsp - 요약카드 (미답변문의, 공지 진행중은 게시판 기능 구현안되어있으므로 보류.)
         int totalPosts = boardService.countAllPosts();
-        // JSP에서 ${stats.totalPosts}로 사용
         Map<String, Object> stats = new HashMap<>();
-        stats.put("totalPosts", totalPosts);
-        request.setAttribute("stats", stats);
+        stats.put("totalPosts", totalPosts); //전체 게시글
+        stats.put("todayPosts", boardService.countTodayPosts()); //오늘등록
+        request.setAttribute("stats", stats); 
+        request.setAttribute("today", new java.util.Date()); // 오늘 날짜 (JSTL fmt용)
+        
+        List<BoardVO> boardRecent = boardService.findRecentWithFileCount(7); //최근게시글
+        request.setAttribute("boardRecent", boardRecent);
+        
+        
+     // ✅ dashboard.jsp - 공지사항의 최근 5건
+        List<BoardVO> noticeList = boardService.findRecentByBoardCode("notice", 5);
+        request.setAttribute("noticeList", noticeList);
+        
         return "common/dashboard";
     }
-
 }

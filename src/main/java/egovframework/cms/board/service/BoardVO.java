@@ -14,6 +14,8 @@ public class BoardVO {
     private Date updatedAt;
     // 게시판 목록 조회용
     private String boardCode; 
+    // 대시보드 최근 게시글 첨부파일 수(배지용)
+    private Integer fileCount;
     
 	public String getBoardCode() {
 		return boardCode;
@@ -75,4 +77,11 @@ public class BoardVO {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	public Integer getFileCount() {
+		return fileCount;
+	}
+	public void setFileCount(Integer fileCount) {
+		this.fileCount = fileCount;
+	}
+	
 }

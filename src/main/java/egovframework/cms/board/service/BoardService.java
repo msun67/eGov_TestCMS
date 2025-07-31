@@ -17,5 +17,8 @@ public interface BoardService {
     
     
     //대시보드용
-    int countAllPosts();    
+    int countAllPosts();
+    List<BoardVO> findRecentByBoardCode(String boardCode, int limit);
+    int countTodayPosts();
+    List<BoardVO> findRecentWithFileCount(int limit);
 }

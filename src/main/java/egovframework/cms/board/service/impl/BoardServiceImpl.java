@@ -96,5 +96,17 @@ public class BoardServiceImpl implements BoardService{
 	public int countAllPosts() {
 	    return boardDAO.countAllPosts();
 	}
+    @Override
+    public List<BoardVO> findRecentByBoardCode(String boardCode, int limit) {
+        return boardDAO.selectRecentByBoardCode(boardCode, limit);
+    }
+    @Override
+    public int countTodayPosts() {
+        return boardDAO.countTodayPosts();
+    }
+    @Override
+    public List<BoardVO> findRecentWithFileCount(int limit) {
+        return boardDAO.selectRecentWithFileCount(limit);
+    }
     
 }

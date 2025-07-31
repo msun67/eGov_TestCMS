@@ -39,7 +39,6 @@
         <h1>게시판 목록</h1>
         <a href="/demo_cms/write.do?boardCode=${boardCode}">글쓰기</a>
         <a href="<c:url value='/logout.do'/>">로그아웃</a>
-	    <a class="link" style="color:#898989;" href="/demo_cms/boardMaster/create.do">게시판 생성 하기</a>
         <!--<a class="link" style="color:#898989;" href="/demo_cms/board.do">게시판 목록 보기</a>
          <a href="/demo_cms/main.do">메인으로</a> -->
               

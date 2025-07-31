@@ -164,7 +164,7 @@
 	<![CDATA[
 	    DELETE FROM board_post_archive
 	    WHERE deleted_at <= NOW()
-	 ]]>유니티 mcp
+	 ]]>
 	</delete>
 	
 	<!-- 첨부파일 테이블에 데이터 삽입 -->
@@ -207,10 +207,60 @@
 	
 	
 	
-	<!-- 대시보드: 전체 게시글 수 (삭제 제외, 필터 없음) -->
+	<!-- 아래부터 대시보드용 쿼리-->
+	<!-- 전체 게시글 수 (삭제 제외, 필터 없음)  -->
 	<select id="countAllPosts" resultType="int">
 	    SELECT COUNT(*)
 	    FROM board_post
 	    WHERE is_deleted = FALSE
 	</select>
+	
+	<!-- 공지사항 최근 게시글 -->
+	<select id="selectRecentByBoardCode" parameterType="map" resultMap="BoardResultMap">
+        SELECT
+            board_id,
+            board_title,
+            board_code,   
+            created_at 
+        FROM board_post
+        WHERE is_deleted = FALSE
+          AND board_code = #{boardCode}
+        ORDER BY created_at DESC      
+        LIMIT #{limit}
+    </select>
+    
+    <!-- 오늘 등록글 -->
+    <select id="countTodayPosts" resultType="int">
+    <![CDATA[
+	    SELECT COUNT(*)
+	    FROM board_post
+	    WHERE is_deleted = FALSE
+	      AND created_at >= CURRENT_DATE()
+	      AND created_at <  CURRENT_DATE() + INTERVAL 1 DAY
+	]]>
+	</select>
+	
+	<!-- 최근 게시글 + 첨부파일 수 포함 -->
+	<select id="selectRecentWithFileCount" parameterType="map" resultMap="BoardResultMap">
+	    SELECT
+	        p.board_id,
+	        p.board_code,
+	        p.board_title,
+	        p.user_uuid,
+	        p.created_at,
+	        p.view_cnt,
+	        COALESCE(f.cnt, 0) AS fileCount
+	    FROM board_post p	    	
+	    LEFT JOIN (
+	      SELECT bf.board_id, COUNT(*) AS cnt
+	      FROM board_file bf
+	      WHERE bf.is_deleted = FALSE
+	      GROUP BY bf.board_id
+	    ) f ON f.board_id = p.board_id
+	    WHERE p.is_deleted = 0
+	    ORDER BY p.created_at DESC
+	    LIMIT #{limit}
+  </select>
+    
+    
 </mapper>

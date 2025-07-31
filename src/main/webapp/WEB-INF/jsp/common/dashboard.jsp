@@ -39,7 +39,7 @@
 	                <a href="<c:url value='/boardMaster/create.do'/>">👑 게시판 생성</a>
 	            </li>
 	            <li class="menu-item ${fn:contains(requestURI, '/admin/userList.do') ? 'active' : ''}">
-	                <a href="<c:url value='/admin/userList.do'/>">🧑‍🤝‍🧑 사용자 관리</a>
+	                <a href="<c:url value=''/>">🧑‍🤝‍🧑 사용자 관리</a>
 	            </li>
 	        </ul>
 	    </sec:authorize>
@@ -49,7 +49,7 @@
 	        <div class="menu-section">사용자 전용 메뉴</div>
 	        <ul class="menu">
 	            <li class="menu-item ${fn:contains(requestURI, '/my/posts.do') ? 'active' : ''}">
-	                <a href="<c:url value='/my/posts.do'/>">📚 내가 쓴 글</a>
+	                <a href="<c:url value=''/>">📚 내가 쓴 글</a>
 	            </li>
 	        </ul>
 	    </sec:authorize>
@@ -59,7 +59,7 @@
 	    	<div class="menu-section">부서원 전용 메뉴</div>
 	        <ul class="menu">
 	            <li class="menu-item ${fn:contains(requestURI, '/org/orglist.do') ? 'active' : ''}">
-	                <a href="<c:url value='/org/orglist.do'/>">🏢 조직원 관리</a>
+	                <a href="<c:url value=''/>">🏢 조직원 관리</a>
 	            </li>
 	        </ul>
 	    </sec:authorize>
@@ -133,7 +133,7 @@
             </div>
         </section>
         
-        <!-- 최근 게시글 (boardRecent: List<BoardPostVO>) -->
+        <!-- 최근 게시글 (boardRecent: List<BoardVO>) -->
         <section class="panel">
             <div class="panel-head">
                 <h2>최근 게시글</h2>
@@ -161,20 +161,23 @@
                     <tbody>
                     <c:forEach var="post" items="${boardRecent}">
                         <tr>
-                            <td><c:out value="${post.postNo}"/></td>
+                            <td><c:out value="${post.boardId}"/></td>
                             <td class="title">
                                 <a href="<c:url value='/detail.do'>
-                                           <c:param name='post_no' value='${post.postNo}'/>
-                                           <c:param name='board_code' value='${post.boardCode}'/>
+                                           <c:param name='boardId' value='${post.boardId}'/>
+                                           <c:param name='boardCode' value='${post.boardCode}'/>
                                          </c:url>">
-                                    <c:out value="${post.title}"/>
+                                    <c:out value="${post.boardTitle}"/>
                                 </a>
                                 <c:if test="${post.fileCount > 0}">
                                     <span class="file-badge">파일</span>
                                 </c:if>
                             </td>
-                            <td><c:out value="${post.writerId}"/></td>
-                            <td><fmt:formatDate value="${post.postDate}" pattern="yyyy-MM-dd"/></td>
+                            <td><c:out value="${post.userUuid}"/></td>
+                            <td>
+	                            <fmt:parseDate value="${post.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="ps"/>
+	                            <fmt:formatDate value="${ps}" pattern="yyyy-MM-dd"/>
+                            </td>
                             <td><c:out value="${post.viewCnt}"/></td>
                         </tr>
                     </c:forEach>
@@ -194,15 +197,18 @@
             <div class="panel">
                 <div class="panel-head"><h2>공지사항</h2></div>
                 <ul class="list">
-                    <c:forEach var="n" items="${noticeList}" end="4">
+                    <c:forEach var="n" items="${noticeList}">
                         <li>
                             <a href="<c:url value='/detail.do'>
-                                      <c:param name='post_no' value='${n.postNo}'/>
-                                      <c:param name='board_code' value='${n.boardCode}'/>
+                                      <c:param name='boardId' value='${n.boardId}'/>
+                                      <c:param name='boardCode' value='${n.boardCode}'/>
                                     </c:url>">
                                 <span class="dot"></span>
-                                <span class="text"><c:out value="${n.title}"/></span>
-                                <span class="date"><fmt:formatDate value="${n.postDate}" pattern="MM-dd"/></span>
+                                <span class="text"><c:out value="${n.boardTitle}"/></span>
+                                <span class="date">
+	                                <fmt:parseDate value="${n.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" var="pd"/>
+									<fmt:formatDate value="${pd}" pattern="MM-dd"/>
+                                </span>
                             </a>
                         </li>
                     </c:forEach>
@@ -214,9 +220,17 @@
 
             <div class="panel">
                 <div class="panel-head"><h2>빠른 링크</h2></div>
-                <div class="links">
-                    <a class="link-chip" href="<c:url value='/stats/traffic.do'/>">🏳️ 방문 통계</a>
-                    <a class="link-chip" href="<c:url value='/settings.do'/>">🏳️ 환경 설정</a>
+                <ul class="list">
+                	<li>
+	                    <a href="<c:url value=''/>">
+		                    <span class="dot"></span>
+		                    <span class="text">🏳️ 방문 통계</span>	                    
+	                    </a>
+	                    <a href="<c:url value=''/>">
+		                    <span class="dot"></span>
+		                    <span class="text">🏳️ 환경 설정</span>	
+	                    </a>
+                	</li>
                 </div>
             </div>
         </section>
