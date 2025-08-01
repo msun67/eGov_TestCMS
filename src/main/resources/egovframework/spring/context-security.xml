@@ -35,7 +35,11 @@
         <!-- 🔹 form-login 대신 Custom Filter 사용 -->
         <custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter"/>
 
+		
         <logout logout-url="/logout.do" logout-success-url="/main.do" invalidate-session="true"  delete-cookies="JSESSIONID"/>
+        
+        <!-- ✅ 게시판 권한 거부 시: /board.do로 리다이렉트 + 세션 메시지 -->
+    	<access-denied-handler ref="customSecurityHandler"/>
         <csrf disabled="false"/>
     </http>
 
@@ -60,7 +64,7 @@
         <beans:property name="passwordParameter" value="password"/>
         <beans:property name="userTypeParameter" value="userType"/>
         <beans:property name="authenticationSuccessHandler" ref="customAuthSuccessHandler"/>
-        <beans:property name="authenticationFailureHandler" ref="customAuthFailureHandler"/>
+        <beans:property name="authenticationFailureHandler" ref="customSecurityHandler"/>
     </beans:bean>
 
     <!-- ✅ Authentication Manager -->
@@ -72,13 +76,16 @@
     <beans:bean id="passwordEncoder"
                 class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-    <!-- ✅ 로그인 성공/실패 핸들러 -->
+    <!-- ✅ 로그인 성공 핸들러 -->
     <beans:bean id="customAuthSuccessHandler"
                 class="egovframework.cms.member.security.handler.CustomAuthSuccessHandler"/>
-    <beans:bean id="customAuthFailureHandler"
-                class="egovframework.cms.member.security.handler.CustomAuthFailureHandler"/>  
-                
-    <!-- JSP에서 권한 검사 <sec:authorize> 태그 활성화-->            
-    <security:global-method-security secured-annotations="enabled" />            
+    
+    <!-- ✅ 로그인 실패 + 권한 거부를 겸임하는 핸들러 -->            
+    <beans:bean id="customSecurityHandler"
+                class="egovframework.cms.member.security.handler.CustomSecurityHandler"/>
+    
+    <!-- ✅ 게시판 게시글 소유자/관리자 확인 -->
+    <beans:bean id="boardSecurity" 
+    			class="egovframework.cms.member.security.board.BoardSecurity"/>  
 
 </beans:beans>

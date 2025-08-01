@@ -27,7 +27,8 @@ public class DashboardController {
 	@GetMapping("/dashboard.do")
 	// ✅ principal - 스프링시큐리티에서 현재 인증된 사용자의 정보를 담고 있는 객체
     public String dashboard(HttpServletRequest request, Principal principal) {
-        if (principal instanceof Authentication) {
+		
+		if (principal instanceof Authentication) {
             Object userObj = ((Authentication) principal).getPrincipal();
             if (userObj instanceof LoginVO) {
                 LoginVO user = (LoginVO) userObj;
@@ -35,8 +36,8 @@ public class DashboardController {
                 request.setAttribute("userType", userType); // EL에서 바로 접근 가능
                 //System.out.println("✅ DashboardController userType = " + userType);
             }
-        }        
-        
+        }
+
         // ✅ dashboard.jsp - 요약카드 (미답변문의, 공지 진행중은 게시판 기능 구현안되어있으므로 보류.)
         int totalPosts = boardService.countAllPosts();
         Map<String, Object> stats = new HashMap<>();

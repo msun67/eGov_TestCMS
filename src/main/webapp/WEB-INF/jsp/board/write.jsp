@@ -46,9 +46,13 @@
                         </td>
                     </tr>
                     <tr>
+                    	<!-- UUID로 출력 -->
                         <th>작성자</th>
-                        <td>
-                            <input type="text" name="userUuid" style="width:100%;" required />
+                        <td style="font-size:14px; padding-left:20px;">
+                        <sec:authentication property='principal.userUuid'/>
+                        <!-- 서버로도 UUID를 전송 -->
+					    <input type="hidden" name="userUuid"
+					           value="<sec:authentication property='principal.userUuid'/>"/>
                         </td>
                     </tr>
                     <tr>

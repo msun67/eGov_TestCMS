@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -111,6 +112,8 @@ public class BoardController {
 		return "board/detail"; // 상세보기 페이지로 이동
 	}
 
+	//boardCode가 notice면 관리자만 통과하도록 표현식 평가
+	@PreAuthorize("(#boardCode != 'notice') or hasRole('ROLE_ADMIN')")
 	// 글쓰기 페이지로 이동
 	@GetMapping("/write.do")
 	public String writeForm(@RequestParam("boardCode") String boardCode, Model model) {
@@ -123,6 +126,8 @@ public class BoardController {
 		return "board/write";
 	}
 
+	//반환값에 대해 검증
+	@PreAuthorize("(#form.boardCode != 'notice') or hasRole('ROLE_ADMIN')")
 	// 글쓰기 화면에서 등록 버튼 클릭 후
 	@PostMapping("/write.do")
 	public String writeSubmit(BoardVO boardVO,
@@ -172,6 +177,7 @@ public class BoardController {
 		return "redirect:/board.do?boardCode=" + boardCode;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or @boardSecurity.isOwner(#boardId, authentication)")
 	// 글 수정 페이지로 이동
 	@GetMapping("/edit.do")
 	public String updateForm(@RequestParam("boardId") int boardId,
@@ -194,6 +200,7 @@ public class BoardController {
 		return "board/edit"; //글 수정 페이지로 이동
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or @boardSecurity.isOwner(#boardVO.boardId, authentication)")
 	// 글 수정 화면에서 수정 처리
 	@PostMapping("/update.do")
 	public String updateSubmit(BoardVO boardVO,
@@ -222,6 +229,7 @@ public class BoardController {
 		return "redirect:/board.do?boardCode=" + boardCode;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or @boardSecurity.isOwner(#boardId, authentication)")
 	// 게시글 삭제
 	@PostMapping("/delete.do")
 	public String deleteBoard(@RequestParam("boardId") int boardId,

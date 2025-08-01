@@ -51,3 +51,8 @@
 .btn-group .btn:hover {
     background-color: #134c94;
 }
+
+.input-readonly{
+  background:#f9fafb; border:1px solid #e5e7eb; color:#6b7280;
+  border-radius:8px; height:36px; padding:0 10px;
+}

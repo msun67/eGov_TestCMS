@@ -6,6 +6,7 @@
     <result column="user_id" property="userId"/>
     <result column="password" property="password"/>
     <result column="user_type" property="userType"/>
+    <result column="user_uuid" property="userUuid"/>
 </resultMap>
 
     <!-- 스프링 시큐리티 기본 용도 -->
@@ -23,9 +24,11 @@
         SELECT
             user_id,
             password,
-            user_type
+            user_type,
+            user_uuid
         FROM user_details
         WHERE user_id = #{userId}
         AND user_type = #{userType}
+        LIMIT 1
     </select>
 </mapper>

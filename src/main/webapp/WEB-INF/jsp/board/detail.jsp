@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +20,8 @@
     
     <div class="main-content">
         <div class="board-detail-container">
+        
+        	<sec:authentication property="principal.userUuid" var="loginUuid"/>        	
         
             <!-- 제목 -->
             <h3 class="board-title">${board.boardTitle}</h3>
@@ -101,9 +104,43 @@
 
             <!-- 버튼 영역 -->
             <div class="btn-group">
-                <a href="edit.do?boardId=${board.boardId}&boardCode=${boardCode}" class="btn btn-blue">수정</a>
-                <!-- <a href="delete.do?boardId=${board.boardId}&boardCode=${boardCode}" class="btn btn-black">삭제</a> -->
-                <a href="board.do?boardCode=${boardCode}" class="btn btn-gray">목록으로</a>
+				  <!-- 1) 관리자: 항상 표시 -->
+				  <sec:authorize access="hasRole('ROLE_ADMIN')">
+				    <a href="<c:url value='/edit.do'>
+				               <c:param name='boardId' value='${board.boardId}'/>
+				               <c:param name='boardCode' value='${boardCode}'/>
+				             </c:url>" class="btn btn-blue">수정</a>
+				
+				    <form action="<c:url value='/delete.do'/>" method="post" style="display:inline;">
+				      <sec:csrfInput/>
+				      <input type="hidden" name="boardId" value="${board.boardId}"/>
+				      <input type="hidden" name="boardCode" value="${boardCode}"/>
+				      <button type="submit" class="btn btn-black"
+				              onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+				    </form>
+				  </sec:authorize>
+				
+				  <!-- 2) 일반 로그인 사용자: 본인 글일 때만 표시 -->
+				  <sec:authorize access="isAuthenticated()">
+				    <c:if test="${loginUuid == board.userUuid}">
+				      <a href="<c:url value='/edit.do'>
+				                 <c:param name='boardId' value='${board.boardId}'/>
+				                 <c:param name='boardCode' value='${boardCode}'/>
+				               </c:url>" class="btn btn-blue">수정</a>
+				
+				      <form action="<c:url value='/delete.do'/>" method="post" style="display:inline;">
+				        <sec:csrfInput/>
+				        <input type="hidden" name="boardId" value="${board.boardId}"/>
+				        <input type="hidden" name="boardCode" value="${boardCode}"/>
+				        <button type="submit" class="btn btn-black"
+				                onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+				      </form>
+				    </c:if>
+				  </sec:authorize>
+				
+				  <!-- 3) 목록으로 (항상 표시) -->
+				  <a href="<c:url value='/board.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
+				     class="btn btn-gray">목록으로</a>
             </div>
 
         </div><!-- board-detail-container -->

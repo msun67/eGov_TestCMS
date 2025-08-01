@@ -36,20 +36,17 @@
 			<h1><c:out value="${boardName}"/></h1>
 		      <div class="page-sub">
 		        <div class="page-sub-left">
-		          <span class="badge success">목록 보기</span>
+		          <span class="badge success">
+		              <sec:authorize access="hasRole('ROLE_ADMIN')"> 관리자 </sec:authorize>
+		              <sec:authorize access="hasRole('ROLE_USER')"> 사용자 </sec:authorize>
+		              <sec:authorize access="hasRole('ROLE_STAFF')"> 부서원 </sec:authorize>
+		              </span>
 		          <span class="welcome">
 		            환영합니다,
 		            <c:choose>
 		              <c:when test="${not empty displayName}">${displayName}</c:when>
 		              <c:otherwise><sec:authentication property="principal.username"/></c:otherwise>
-		            </c:choose>님 👋
-		            <span class="role">
-		              (권한:
-		              <sec:authorize access="hasRole('ROLE_ADMIN')">관리자</sec:authorize>
-		              <sec:authorize access="hasRole('ROLE_USER')">사용자</sec:authorize>
-		              <sec:authorize access="hasRole('ROLE_STAFF')">부서원</sec:authorize>
-		              )
-		            </span>
+		            </c:choose>님👋		           
 		          </span>
 		        </div>
 		        <div class="page-sub-right">
@@ -75,9 +72,26 @@
       
         <!-- 글쓰기, 검색 폼 -->
         <div class="board-actions">
-        <div class="board-toolbar">
-        	<a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
-		       	class="btn primary">글쓰기</a> </div>
+        
+	        <div class="board-toolbar">
+				<c:choose>
+			      <%-- 공지사항: 관리자만 글쓰기 노출 --%>
+			      <c:when test="${boardCode eq 'notice'}">
+			        <sec:authorize access="hasRole('ROLE_ADMIN')">
+			          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
+			             class="btn primary">글쓰기</a>
+			        </sec:authorize>
+			      </c:when>
+			
+			      <%-- 그 외 게시판: 로그인 사용자에게 노출 --%>
+			      <c:otherwise>
+			        <sec:authorize access="isAuthenticated()">
+			          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
+			             class="btn primary">글쓰기</a>
+			        </sec:authorize>
+			      </c:otherwise>
+			    </c:choose>
+			 </div>
 		       	
 	        <form method="get" action="<c:url value='/board.do'/>" class="board-actions-form">
 	            <input type="hidden" name="boardCode" value="${boardCode}" />
@@ -96,7 +110,7 @@
 	        <table class="table">
 		        <colgroup>
 					<col style="width: 80px">    <!-- 번호 -->
-					<col>                         <!-- 제목: 자동 확장 -->
+					<col>                        <!-- 제목: 자동 확장 -->
 					<col style="width: 180px">   <!-- 작성자 -->
 					<col style="width: 140px">   <!-- 게시일 -->
 					<col style="width: 100px">   <!-- 조회수 -->

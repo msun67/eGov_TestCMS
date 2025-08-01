@@ -14,6 +14,7 @@ public class LoginVO implements UserDetails {
 	private String userId;
     private String password;
     private int userType;
+    private String userUuid;
 
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
@@ -27,6 +28,9 @@ public class LoginVO implements UserDetails {
 
     public int getUserType() { return userType; }
     public void setUserType(int userType) { this.userType = userType; }
+    
+    public String getUserUuid() { return userUuid; }
+    public void setUserUuid(String userUuid) { this.userUuid = userUuid; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

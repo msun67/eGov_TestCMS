@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,10 +21,17 @@
 	<div class="main-content">
 		<!-- board-detail-container -->
 	    <div class="board-detail-container">
+	    
+	    	<!-- 로그인 사용자의 8자리 UUID -->
+			<sec:authentication property="principal.userUuid" var="loginUuid"/>
+			<!-- 관리자 여부 -->
+			<sec:authorize access="hasRole('ROLE_ADMIN')" var="isAdmin"/>
+			
 	    	<h1 class="board-title">게시글 수정</h1>
 	    	
 	    	 <!-- 수정 + 삭제 통합 폼 -->
 		    <form action="update.do" method="post" enctype="multipart/form-data" onsubmit="return confirm('정말 수정하시겠습니까?');">
+		        <sec:csrfInput/>
 		        <input type="hidden" name="boardId" value="${board.boardId}" />
 		
 		        <table class="board-table">
@@ -91,12 +99,26 @@
 		
 		        <!-- 버튼 영역 -->
 		        <div class="btn-group">
-		            <button type="submit" class="btn btn-blue">수정</button>		
-		            <!-- 삭제는 JS로 confirm 처리 추천 -->
-		            <button type="button" class="btn btn-black" onclick="deletePost(${board.boardId}, '${board.boardCode}')">삭제</button>		
-		            <button type="button" class="btn btn-gray" onclick="location.href='board.do?boardCode=${board.boardCode}'">목록으로</button>
+					<c:if test="${isAdmin or loginUuid == board.userUuid}">
+					<!-- ✅ 수정: CSRF 포함 -->
+					<button type="submit" class="btn btn-blue">수정</button>
+					
+					<!-- ✅ 삭제: 숨김 폼 + JS 제출(아래 1-3 참고) -->
+					<button type="button" class="btn btn-black"
+					        onclick="deletePost(${board.boardId}, '${board.boardCode}')">삭제</button>
+					</c:if>
+					
+					<!-- 항상 보이는 '목록' -->
+					<button type="button" class="btn btn-gray"
+					        onclick="location.href='<c:url value="/board.do"><c:param name="boardCode" value="${board.boardCode}"/></c:url>'">목록으로</button>
 		        </div>
 		    </form>
+		    <!-- ✅ 삭제 전용 숨김 폼 -->
+			<form id="deleteForm" method="post" action="<c:url value='/delete.do'/>" style="display:none;">
+			  <sec:csrfInput/>
+			  <input type="hidden" name="boardId"/>
+			  <input type="hidden" name="boardCode"/>
+			</form>		    
 		</div>
 
 <!-- 스마트에디터 -->  
@@ -126,27 +148,11 @@
 <!-- 삭제용 POST 폼 -->  
 <script>
     function deletePost(boardId, boardCode) {
-        if (confirm('정말 삭제하시겠습니까?')) {
-            const form = document.createElement('form');
-            form.method = 'post';
-            form.action = 'delete.do';
-
-            const idInput = document.createElement('input');
-            idInput.type = 'hidden';
-            idInput.name = 'boardId';
-            idInput.value = boardId;
-
-            const codeInput = document.createElement('input');
-            codeInput.type = 'hidden';
-            codeInput.name = 'boardCode';
-            codeInput.value = boardCode;
-
-            form.appendChild(idInput);
-            form.appendChild(codeInput);
-
-            document.body.appendChild(form);
-            form.submit();
-        }
+    	if (!confirm('정말 삭제하시겠습니까?')) return;
+        const f = document.getElementById('deleteForm');
+        f.boardId.value = boardId;
+        f.boardCode.value = boardCode;
+        f.submit();
     }
 </script>
 
