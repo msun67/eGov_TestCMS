@@ -89,25 +89,6 @@
 	    sSkinURI: "<c:url value='/resources/smarteditor/SmartEditor2Skin.html'/>",
 	    fCreator: "createSEditor2"
 	});
-
-//submitForm()을 명시적 호출
-function submitForm() {
-	// 스마트에디터 내용 textarea에 적용
-    oEditor[0].exec("UPDATE_CONTENTS_FIELD", []);
-	
-    const content = document.getElementById("boardContent").value;
-    //alert("저장될 HTML:\n" + content);
-    if (content.trim() === "") {
-        alert("내용을 입력해주세요.");
-        return false;
-    }
-    if (totalSize > maxTotalSize) {
-        alert("전체 첨부파일 용량은 40MB를 초과할 수 없습니다.");
-        return false;
-    }
-    console.log("전송할 HTML:", content);
-    return true;
-}
 </script>
 
 <!-- 첨부파일영역 -->
@@ -129,6 +110,7 @@ function addFileInput() {
     fileInput.type = "file";
     fileInput.name = "uploadFiles";
     fileInput.style.display = "none"; // 숨겨진 실제 input
+    
     fileInput.addEventListener("change", function () {
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
@@ -205,6 +187,37 @@ function addFileInput() {
 window.onload = function () {
     addFileInput();
 };
+
+//submitForm()을 명시적 호출
+function submitForm() {
+	// 스마트에디터 내용 textarea에 적용
+    oEditor[0].exec("UPDATE_CONTENTS_FIELD", []);
+	
+    const content = document.getElementById("boardContent").value;
+    //alert("저장될 HTML:\n" + content);
+    if (content.trim() === "") {
+        alert("내용을 입력해주세요.");
+        return false;
+    }
+    if (totalSize > maxTotalSize) {
+        alert("전체 첨부파일 용량은 40MB를 초과할 수 없습니다.");
+        return false;
+    }
+    
+ 	// ✅ 파일 디버깅
+    const fileInputs = document.querySelectorAll("input[type='file'][name='uploadFiles']");
+    let validFiles = 0;
+    fileInputs.forEach(input => {
+        if (input.files.length > 0) {
+            console.log("첨부된 파일:", input.files[0].name);
+            validFiles++;
+        }
+    });
+
+    console.log("첨부된 유효 파일 수:", validFiles);
+
+    return true; // 유효하면 전송
+}
 </script>
 
         </div><!-- board-detail-container -->

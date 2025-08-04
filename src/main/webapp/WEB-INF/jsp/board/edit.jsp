@@ -259,6 +259,12 @@ function bindEventsToExistingRows() {
             }
 
             textInput.value = file.name;
+            
+            // ✅ 기존 파일이면 삭제 대상으로 등록
+            if (existingFileIdInput) {
+                deleteFileIdInput.value = existingFileIdInput.value;
+                existingFileIdInput.disabled = true; // 서버로 전달되지 않도록 처리
+            }
         };
 
         delBtn.onclick = () => {
@@ -267,15 +273,21 @@ function bindEventsToExistingRows() {
             if (existingFileIdInput) {
                 // 기존 파일일 경우 삭제 체크 처리
                 deleteFileIdInput.value = existingFileIdInput.value;
-                row.style.display = "none"; // 화면에서 숨기기
+                row.remove(); // 아예 DOM에서 제거
             } else {
-                // 새로 추가한 행일 경우 삭제
+                // 새로 추가한 행일 경우 내용만 비움
                 if (rows.length === 1) {
                     textInput.value = "";
                     fileInput.value = "";
                 } else {
-                    row.remove();
+                    row.remove();// 두 개 이상이면 DOM에서 제거
                 }
+            }
+         	// ✅ 삭제 후 file-row가 하나도 없으면 새로 추가
+            const remainingRows = document.querySelectorAll(".file-row");
+            if (remainingRows.length === 0) {
+                addFileInput();
+                bindEventsToExistingRows(); // 새로 추가된 행에 이벤트 바인딩
             }
         };
 

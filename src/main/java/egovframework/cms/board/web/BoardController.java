@@ -3,10 +3,12 @@ package egovframework.cms.board.web;
 import java.io.File;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -122,18 +124,29 @@ public class BoardController {
 		
 		 model.addAttribute("boardMasterList", boardMasterList);
 		 model.addAttribute("boardCode", boardCode); // 현재 선택된 boardCode 전달
+		 
+		 System.out.println("✅ 글쓰기 컨트롤러 진입");
 		
 		return "board/write";
 	}
 
 	//반환값에 대해 검증
-	@PreAuthorize("(#form.boardCode != 'notice') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("(#boardCode != 'notice') or hasRole('ROLE_ADMIN')")
 	// 글쓰기 화면에서 등록 버튼 클릭 후
 	@PostMapping("/write.do")
 	public String writeSubmit(BoardVO boardVO,
 								@RequestParam("boardCode") String boardCode,
 		                        @RequestParam("uploadFiles") MultipartFile[] files,
-								RedirectAttributes redirect) {
+		                        HttpServletRequest request, RedirectAttributes redirect) throws Exception {
+		
+	    System.out.println("====[ 디버깅: Request 파라미터 ]====");
+	    request.getParameterMap().forEach((k, v) -> System.out.println("Param: " + k + " = " + Arrays.toString(v)));
+
+	    System.out.println("====[ 디버깅: Multipart Part 목록 ]====");
+	    for (Part part : request.getParts()) {
+	        System.out.println("📦 Part name = " + part.getName() + ", size = " + part.getSize());
+	    }
+		
 		// 1. 게시글 저장
 		boardService.insertBoard(boardVO);
 		int boardId = boardVO.getBoardId(); // 자동으로 생성된 ID 값 가져옴.
@@ -144,8 +157,12 @@ public class BoardController {
 	    if (!dir.exists()) {
 	        dir.mkdirs();
 	    }
-
+	    
+	    System.out.println("📦 Multipart 처리 여부: " + (files != null));
+	    System.out.println("📦 Multipart 파일 수: " + (files != null ? files.length : "null"));
 	    for (MultipartFile file : files) {
+	    	System.out.println("📎 업로드된 파일명: " + file.getOriginalFilename());
+	        System.out.println("📎 파일 크기: " + file.getSize());
 	        if (!file.isEmpty()) {
 	            try {
 	                String originalName = file.getOriginalFilename();
@@ -164,17 +181,17 @@ public class BoardController {
 	                boardFile.setFilePath(uploadDir);//경로만 저장
 	                boardFile.setFileSize((int) file.getSize());
 	                boardFile.setFileType(file.getContentType());
-
+	               
 	                boardFileService.saveFile(boardFile); // DB에 저장
-
 	            } catch (IOException e) {
 	                e.printStackTrace();
 	                redirect.addFlashAttribute("errorMessage", "❌ 파일 업로드 중 오류 발생");
 	            }
 	        }
 	    }
-		 redirect.addFlashAttribute("okMessage", "✅ 등록이 완료되었습니다.");		 
+		redirect.addFlashAttribute("okMessage", "✅ 등록이 완료되었습니다.");	
 		return "redirect:/board.do?boardCode=" + boardCode;
+		//return "board/write";
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN') or @boardSecurity.isOwner(#boardId, authentication)")

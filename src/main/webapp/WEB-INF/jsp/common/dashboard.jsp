@@ -81,7 +81,7 @@
 		                    (권한:
 		                    <sec:authorize access="hasRole('ROLE_ADMIN')">관리자</sec:authorize>
 		                    <sec:authorize access="hasRole('ROLE_USER')">사용자</sec:authorize>
-		                    <sec:authorize access="hasRole('ROLE_STAFF')">부서원</sec:authorize>
+		                    <sec:authorize access="hasRole('ROLE_ORG')">부서원</sec:authorize>
 		                    )
 		                </span>
 		            </span>

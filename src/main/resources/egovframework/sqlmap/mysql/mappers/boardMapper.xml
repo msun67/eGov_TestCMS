@@ -175,8 +175,15 @@
 	        #{boardId}, #{originalName}, #{saveName}, #{filePath}, #{fileSize}, #{fileType}
 	    )
 	</insert>
-	
-	<!-- 게시글에 삭제 안된 첨부파일만 가져옴 -->
+	<!-- 실제 파일 DB에서 삭제 & 기존 첨부파일 교체 시 삭제할 대상으로 입력 -->
+	<delete id="deleteFilesByIds" parameterType="list">
+	    DELETE FROM board_file
+	    WHERE file_id IN 
+	    <foreach item="id" collection="list" open="(" separator="," close=")">
+	        #{id}
+	    </foreach>
+	</delete>
+	<!-- 게시글 상세보기시 첨부파일 목록 조회 -->
 	<select id="selectFilesByBoardId" parameterType="int" resultMap="BoardFileResultMap">
 	    SELECT * FROM board_file
 	    WHERE board_id = #{boardId} 
@@ -192,14 +199,7 @@
 	   </foreach>
 	</select>
 
-	<!-- 실제 파일 DB에서 삭제 -->
-	<delete id="deleteFilesByIds" parameterType="list">
-	    DELETE FROM board_file
-	    WHERE file_id IN 
-	    <foreach item="id" collection="list" open="(" separator="," close=")">
-	        #{id}
-	    </foreach>
-	</delete>
+	
 	
 	<select id="getFileIdsByBoardId" parameterType="int" resultType="int">
 	    SELECT file_id FROM board_file WHERE board_id = #{boardId}

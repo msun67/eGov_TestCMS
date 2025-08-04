@@ -8,6 +8,7 @@ import egovframework.cms.board.service.BoardService;
 import egovframework.cms.board.service.BoardVO;
 import egovframework.cms.member.security.LoginVO;
 
+// boardId의 작성자가 현재 로그인 되어있는 사용자인지 판단하는 로직(소유자 확인용)
 @Component("boardSecurity")
 public class BoardSecurity {
 	

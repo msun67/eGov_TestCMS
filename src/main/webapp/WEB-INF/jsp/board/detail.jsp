@@ -121,7 +121,7 @@
 				  </sec:authorize>
 				
 				  <!-- 2) 일반 로그인 사용자: 본인 글일 때만 표시 -->
-				  <sec:authorize access="isAuthenticated()">
+				  <sec:authorize access="isAuthenticated() and !hasRole('ROLE_ADMIN')">
 				    <c:if test="${loginUuid == board.userUuid}">
 				      <a href="<c:url value='/edit.do'>
 				                 <c:param name='boardId' value='${board.boardId}'/>

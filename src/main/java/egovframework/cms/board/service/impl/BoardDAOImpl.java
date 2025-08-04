@@ -93,26 +93,34 @@ public class BoardDAOImpl implements BoardDAO {
 	     return sqlSession.selectOne(namespace + ".getNextPost", Map.of("createdAt", createdAt, "boardCode", boardCode));
 	 }
 	 
-	//첨부파일
+	 
+	//첨부파일 등록
 	@Override
 	public void insertFile(BoardFileVO boardfile) {
-	    sqlSession.insert(namespace + ".insertFile", boardfile);
+		System.out.println("📥 DAO: insertFile 호출됨 = " + boardfile.getOriginalName());
+	    sqlSession.insert(namespace + ".insertFile", boardfile);	    
 	}
-	
+	// 기존 첨부파일 교체 시 삭제할 대상으로 입력
+	@Override
+	public void deleteFilesByIds(List<Integer> fileIds) {
+		sqlSession.delete(namespace + ".deleteFilesByIds", fileIds);
+	}
+	// 게시글 상세보기시 첨부파일 목록 조회
 	@Override
 	public List<BoardFileVO> getFileListByBoardId(int boardId) {
 	    return sqlSession.selectList(namespace + ".selectFilesByBoardId", boardId);
 	}
+	
+	
+	
+	
 	
 	@Override //Mapper 구현안되어있음.
 	public BoardFileVO getFileById(int fileId) {
 	    return sqlSession.selectOne(namespace + ".getFileById", fileId);
 	}
 
-	@Override
-	public void deleteFilesByIds(List<Integer> fileIds) {
-		sqlSession.delete(namespace + ".deleteFilesByIds", fileIds);
-	}
+	
 	
 	@Override
 	public List<BoardFileVO> getFilesByIds(List<Integer> fileIds) {

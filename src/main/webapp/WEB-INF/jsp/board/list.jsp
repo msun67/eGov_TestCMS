@@ -39,7 +39,7 @@
 		          <span class="badge success">
 		              <sec:authorize access="hasRole('ROLE_ADMIN')"> 관리자 </sec:authorize>
 		              <sec:authorize access="hasRole('ROLE_USER')"> 사용자 </sec:authorize>
-		              <sec:authorize access="hasRole('ROLE_STAFF')"> 부서원 </sec:authorize>
+		              <sec:authorize access="hasRole('ROLE_ORG')"> 부서원 </sec:authorize>
 		              </span>
 		          <span class="welcome">
 		            환영합니다,
@@ -74,23 +74,25 @@
         <div class="board-actions">
         
 	        <div class="board-toolbar">
-				<c:choose>
-			      <%-- 공지사항: 관리자만 글쓰기 노출 --%>
-			      <c:when test="${boardCode eq 'notice'}">
-			        <sec:authorize access="hasRole('ROLE_ADMIN')">
-			          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
-			             class="btn primary">글쓰기</a>
-			        </sec:authorize>
-			      </c:when>
-			
-			      <%-- 그 외 게시판: 로그인 사용자에게 노출 --%>
-			      <c:otherwise>
-			        <sec:authorize access="isAuthenticated()">
-			          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
-			             class="btn primary">글쓰기</a>
-			        </sec:authorize>
-			      </c:otherwise>
-			    </c:choose>
+		        <c:if test="${not empty boardCode}">
+					<c:choose>
+				      <%-- 공지사항: 관리자만 글쓰기 노출 --%>
+				      <c:when test="${boardCode eq 'notice'}">
+				        <sec:authorize access="hasRole('ROLE_ADMIN')">
+				          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
+				             class="btn primary">글쓰기</a>
+				        </sec:authorize>
+				      </c:when>
+				
+				      <%-- 그 외 게시판: 로그인 사용자에게 노출 --%>
+				      <c:otherwise>
+				        <sec:authorize access="isAuthenticated()">
+				          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
+				             class="btn primary">글쓰기</a>
+				        </sec:authorize>
+				      </c:otherwise>
+				    </c:choose>
+				 </c:if>
 			 </div>
 		       	
 	        <form method="get" action="<c:url value='/board.do'/>" class="board-actions-form">

@@ -8,8 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface BoardFileService {
 	void saveFile(BoardFileVO boardfile);
+	void deleteFilesByIds(List<Integer> fileIds) throws Exception;
 	List<BoardFileVO> getFileListByBoardId(int boardId);
 	BoardFileVO getFileById(int fileId);
-	void deleteFilesByIds(List<Integer> fileIds) throws Exception;
     void uploadFiles(int boardId, List<MultipartFile> files, HttpServletRequest request) throws Exception;
 }

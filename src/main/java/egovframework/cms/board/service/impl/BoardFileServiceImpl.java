@@ -23,21 +23,14 @@ public class BoardFileServiceImpl implements BoardFileService {
 	        this.boardDAO = boardDAO;
 	    }
 
+	 
+	//첨부파일등록
 	@Override
 	public void saveFile(BoardFileVO boardfile) {
 		boardDAO.insertFile(boardfile);
 	}
-
-	@Override
-	public List<BoardFileVO> getFileListByBoardId(int boardId) {
-		return boardDAO.getFileListByBoardId(boardId);
-	}
 	
-	@Override
-	public BoardFileVO getFileById(int fileId) {
-	    return boardDAO.getFileById(fileId);
-	}
-	
+	// 기존 첨부파일 교체 시 삭제할 대상으로 입력
 	@Override
     public void deleteFilesByIds(List<Integer> fileIds) throws Exception {
 		if (fileIds == null || fileIds.isEmpty()) return;
@@ -62,6 +55,22 @@ public class BoardFileServiceImpl implements BoardFileService {
         // db에서 파일 메타데이터 삭제
         boardDAO.deleteFilesByIds(fileIds);
     }
+	
+	// 게시글 상세보기시 첨부파일 목록 조회
+	@Override
+	public List<BoardFileVO> getFileListByBoardId(int boardId) {
+		return boardDAO.getFileListByBoardId(boardId);
+	}
+	
+	
+	
+	
+	@Override
+	public BoardFileVO getFileById(int fileId) {
+	    return boardDAO.getFileById(fileId);
+	}
+	
+	
 
 	@Override
 	public void uploadFiles(int boardId, List<MultipartFile> files, HttpServletRequest request) throws Exception {

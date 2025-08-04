@@ -125,7 +125,7 @@
 }
 
 .btn-blue { background-color: #1981d1; }
-.btn-black { background-color: #3b3b3b; }
+.btn-black { background-color: #3b3b3b; font-size:15px !important;}
 .btn-gray { background-color: #757575; }
 
 .btn-group a:hover {
