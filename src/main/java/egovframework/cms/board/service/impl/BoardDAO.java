@@ -32,19 +32,17 @@ public interface BoardDAO {
     BoardVO getNextPost(@Param("createdAt") String createdAt, @Param("boardCode") String boardCode);
     
     
-    //첨부파일등록
+    // 첨부파일등록
     void insertFile(BoardFileVO boardfile);    
     // 기존 첨부파일 교체 시 삭제할 대상으로 입력
     void deleteFilesByIds(List<Integer> fileIds);
     // 게시글 상세보기시 첨부파일 목록 조회
-    List<BoardFileVO> getFileListByBoardId(int boardId);
-    
-    
-    
-    BoardFileVO getFileById(int fileId);//Mapper 구현안되어있음.
-    //특정파일만삭제할때사용
-    List<BoardFileVO>getFilesByIds(List<Integer> fileIds);
-    List<Integer> getFileIdsByBoardId(int boardId);
+    List<BoardFileVO> findFilesByPostId(int boardId);
+    // 기존 첨부파일 교체시 삭제할 대상으로 인식
+    List<BoardFileVO>findFilesByIds(List<Integer> fileIds);
+    // 첨부파일다운로드
+    BoardFileVO getFileById(int fileId) throws Exception;
+
     
     
     

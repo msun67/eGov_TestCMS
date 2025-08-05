@@ -10,6 +10,6 @@ public interface BoardFileService {
 	void saveFile(BoardFileVO boardfile);
 	void deleteFilesByIds(List<Integer> fileIds) throws Exception;
 	List<BoardFileVO> getFileListByBoardId(int boardId);
-	BoardFileVO getFileById(int fileId);
     void uploadFiles(int boardId, List<MultipartFile> files, HttpServletRequest request) throws Exception;
+    BoardFileVO getFileById(int fileId) throws Exception;  
 }

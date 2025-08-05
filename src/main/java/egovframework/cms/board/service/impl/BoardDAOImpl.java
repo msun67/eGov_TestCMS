@@ -97,40 +97,29 @@ public class BoardDAOImpl implements BoardDAO {
 	//첨부파일 등록
 	@Override
 	public void insertFile(BoardFileVO boardfile) {
-		System.out.println("📥 DAO: insertFile 호출됨 = " + boardfile.getOriginalName());
 	    sqlSession.insert(namespace + ".insertFile", boardfile);	    
 	}
-	// 기존 첨부파일 교체 시 삭제할 대상으로 입력
+	// 첨부파일 삭제
 	@Override
 	public void deleteFilesByIds(List<Integer> fileIds) {
 		sqlSession.delete(namespace + ".deleteFilesByIds", fileIds);
 	}
 	// 게시글 상세보기시 첨부파일 목록 조회
 	@Override
-	public List<BoardFileVO> getFileListByBoardId(int boardId) {
-	    return sqlSession.selectList(namespace + ".selectFilesByBoardId", boardId);
+	public List<BoardFileVO> findFilesByPostId(int boardId) {
+	    return sqlSession.selectList(namespace + ".findFilesByPostId", boardId);
 	}
-	
-	
-	
-	
-	
-	@Override //Mapper 구현안되어있음.
-	public BoardFileVO getFileById(int fileId) {
+	// 기존 첨부파일 교체시 삭제할 대상으로 인식
+	@Override
+	public List<BoardFileVO> findFilesByIds(List<Integer> fileIds) {
+	    return sqlSession.selectList(namespace + ".findFilesByIds", fileIds);
+	}
+	// 첨부파일 다운로드
+	@Override
+	public BoardFileVO getFileById(int fileId) throws Exception {
 	    return sqlSession.selectOne(namespace + ".getFileById", fileId);
 	}
 
-	
-	
-	@Override
-	public List<BoardFileVO> getFilesByIds(List<Integer> fileIds) {
-	    return sqlSession.selectList(namespace + ".getFilesByIds", fileIds);
-	}
-	
-	@Override
-	public List<Integer> getFileIdsByBoardId(int boardId) {
-	    return sqlSession.selectList(namespace + ".getFileIdsByBoardId", boardId);
-	}
 
 	
 	// 대시보드용

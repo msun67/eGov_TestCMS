@@ -52,7 +52,7 @@
 			        <ul class="file_down">
 			            <c:forEach var="file" items="${fileList}">
 			                <li>
-			                    <a href="/file/download.do?fileId=${file.fileId}">
+			                    <a href="/demo_cms/file/download.do?fileId=${file.fileId}">
 			                       💾  ${file.originalName} 
 									(<c:choose>
 								        <c:when test="${file.fileSize != null}">
@@ -61,7 +61,7 @@
 								        <c:otherwise>0 KB</c:otherwise>
 								    </c:choose>)
 			                    </a>
-			                    <div class="inner_btn"><a href="#">다운로드</a></div>
+			                    <div class="inner_btn"><a href="/demo_cms/file/download.do?fileId=${file.fileId}">다운로드</a></div>
 			                </li>
 			            </c:forEach>
 			        </ul>
@@ -80,7 +80,7 @@
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                다음글이 없습니다.
+                                <a>다음글이 없습니다.</a>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -95,7 +95,7 @@
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                이전글이 없습니다.
+                                <a>이전글이 없습니다.</a>
                             </c:otherwise>
                         </c:choose>
                     </td>

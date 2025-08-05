@@ -3,9 +3,13 @@ package egovframework.cms.board.web;
 import java.io.File;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
@@ -124,8 +128,6 @@ public class BoardController {
 		
 		 model.addAttribute("boardMasterList", boardMasterList);
 		 model.addAttribute("boardCode", boardCode); // 현재 선택된 boardCode 전달
-		 
-		 System.out.println("✅ 글쓰기 컨트롤러 진입");
 		
 		return "board/write";
 	}
@@ -156,19 +158,20 @@ public class BoardController {
 	    File dir = new File(uploadDir);
 	    if (!dir.exists()) {
 	        dir.mkdirs();
-	    }
-	    
-	    System.out.println("📦 Multipart 처리 여부: " + (files != null));
-	    System.out.println("📦 Multipart 파일 수: " + (files != null ? files.length : "null"));
+	    }	    
 	    for (MultipartFile file : files) {
-	    	System.out.println("📎 업로드된 파일명: " + file.getOriginalFilename());
-	        System.out.println("📎 파일 크기: " + file.getSize());
 	        if (!file.isEmpty()) {
 	            try {
 	                String originalName = file.getOriginalFilename();
-	                String extension = originalName.substring(originalName.lastIndexOf("."));
+	                //String extension = originalName.substring(originalName.lastIndexOf("."));
+	                String extension = "";
+	                if (originalName != null && originalName.contains(".")) {
+	                    extension = originalName.substring(originalName.lastIndexOf("."));
+	                }
+	                // 날짜 생성: _yyMMdd
+	                String dateSuffix = new SimpleDateFormat("_yyMMdd").format(new Date());
 	                String uuid = UUID.randomUUID().toString();
-	                String saveName = uuid + extension;
+	                String saveName = uuid + dateSuffix + extension;
 
 	                File dest = new File(uploadDir, saveName);
 	                file.transferTo(dest); // 파일 저장
@@ -177,7 +180,7 @@ public class BoardController {
 	                BoardFileVO boardFile = new BoardFileVO();
 	                boardFile.setBoardId(boardId);
 	                boardFile.setOriginalName(originalName);
-	                boardFile.setSaveName(saveName);//파일명
+	                boardFile.setSaveName(saveName);//폴더에 저장될 파일명 uuid+날짜+확장자
 	                boardFile.setFilePath(uploadDir);//경로만 저장
 	                boardFile.setFileSize((int) file.getSize());
 	                boardFile.setFileType(file.getContentType());
@@ -230,11 +233,19 @@ public class BoardController {
 		boardService.updateBoard(boardVO);
 		
 		 // 1. 삭제된 첨부파일 처리
-	    if (deleteFileIds != null && !deleteFileIds.isEmpty()) {
-	        boardFileService.deleteFilesByIds(deleteFileIds);
-	        if (deleteFileIds != null) {
-	            System.out.println("삭제 대상 파일 ID 목록: " + deleteFileIds); // 디버깅용
-	        }
+	    if (deleteFileIds != null && !deleteFileIds.isEmpty()) {			
+	    	// null, "", 공백 제거
+	    	List<Integer> cleanIds = deleteFileIds.stream()
+	    		.filter(Objects::nonNull)
+	    		.map(String::valueOf)
+	    		.filter(id -> !id.isBlank())
+	    		.map(Integer::parseInt)
+	    		.collect(Collectors.toList());
+
+	    	if (!cleanIds.isEmpty()) {
+	    		System.out.println("🧨 실제 삭제할 파일 IDs: " + cleanIds);
+	    		boardFileService.deleteFilesByIds(cleanIds);
+	    	}
 	    }
 
 	    // 2. 새로 업로드된 파일 저장

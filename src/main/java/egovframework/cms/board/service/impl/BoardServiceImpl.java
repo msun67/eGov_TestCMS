@@ -59,7 +59,7 @@ public class BoardServiceImpl implements BoardService{
 		int boardId = boardVO.getBoardId();
 
 	    // 1. 해당 게시글의 첨부파일 정보 가져오기
-	    List<BoardFileVO> fileList = boardDAO.getFileListByBoardId(boardId);
+	    List<BoardFileVO> fileList = boardDAO.findFilesByPostId(boardId);
 
 	    // 2. 파일 ID 리스트 추출
 	    List<Integer> fileIds = fileList.stream()

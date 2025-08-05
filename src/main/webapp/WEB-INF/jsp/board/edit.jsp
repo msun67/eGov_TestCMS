@@ -273,7 +273,8 @@ function bindEventsToExistingRows() {
             if (existingFileIdInput) {
                 // 기존 파일일 경우 삭제 체크 처리
                 deleteFileIdInput.value = existingFileIdInput.value;
-                row.remove(); // 아예 DOM에서 제거
+                //row.remove(); // 아예 DOM에서 제거
+                row.style.display = "none";
             } else {
                 // 새로 추가한 행일 경우 내용만 비움
                 if (rows.length === 1) {
@@ -284,7 +285,7 @@ function bindEventsToExistingRows() {
                 }
             }
          	// ✅ 삭제 후 file-row가 하나도 없으면 새로 추가
-            const remainingRows = document.querySelectorAll(".file-row");
+            const remainingRows = document.querySelectorAll(".file-row:not([style*='display: none'])");
             if (remainingRows.length === 0) {
                 addFileInput();
                 bindEventsToExistingRows(); // 새로 추가된 행에 이벤트 바인딩

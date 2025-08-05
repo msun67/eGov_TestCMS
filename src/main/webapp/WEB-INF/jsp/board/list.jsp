@@ -112,7 +112,8 @@
 	        <table class="table">
 		        <colgroup>
 					<col style="width: 80px">    <!-- 번호 -->
-					<col>                        <!-- 제목: 자동 확장 -->
+					<col>                        <!-- 제목 -->
+					<col style="width: 60px">    <!-- 파일 --> 
 					<col style="width: 180px">   <!-- 작성자 -->
 					<col style="width: 140px">   <!-- 게시일 -->
 					<col style="width: 100px">   <!-- 조회수 -->
@@ -121,6 +122,7 @@
 	                <tr>
 	                    <th>번호</th>
 	                    <th>제목</th>
+	                    <th>파일</th>
 	                    <th>작성자</th>
 	                    <th>게시일</th>
 	                    <th>조회수</th>
@@ -137,6 +139,11 @@
 	                                        ${board.boardTitle}
 	                                    </a>
 	                                </td>
+	                                <td>
+									    <c:if test="${board.fileCount > 0}">
+									        📄
+									    </c:if>
+									</td>
 	                                <td>${board.userUuid}</td>
 	                                <td>${fn:substring(board.createdAt, 0, 10)}</td>
 	                                <td>${board.viewCnt}</td>
@@ -145,7 +152,7 @@
 	                    </c:when>
 	                    <c:otherwise>
 	                        <tr>
-	                            <td colspan="5" class="no-post-message">등록된 게시글이 없습니다.</td>
+	                            <td colspan="6" class="no-post-message">등록된 게시글이 없습니다.</td>
 	                        </tr>
 	                    </c:otherwise>
 	                </c:choose>

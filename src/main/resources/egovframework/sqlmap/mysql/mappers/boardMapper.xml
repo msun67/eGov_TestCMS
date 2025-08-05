@@ -15,6 +15,7 @@
     <result property="createdAt" column="created_at"/>
     <result property="updatedAt" column="updated_at"/>
     <result property="boardCode" column="board_code"/>
+    <result property="fileCount" column="file_count"/>
 </resultMap>
 <resultMap id="BoardFileResultMap" type="egovframework.cms.board.service.BoardFileVO">
     <id property="fileId" column="file_id" />
@@ -29,33 +30,36 @@
     <result property="deletedAt" column="deleted_at" />
 </resultMap>
 
-    <!-- 게시판 목록 조회 -->
-    <select id="getBoardList" resultMap="BoardResultMap" parameterType="SearchVO">
-        SELECT *
-	    FROM board_post
-	    WHERE is_deleted = FALSE
-	     <if test="boardCode != null and boardCode != ''">
-	        AND board_code = #{boardCode}
+
+	<!-- 게시판 목록 조회 -->
+	<select id="getBoardList" resultMap="BoardResultMap" parameterType="SearchVO">
+	    SELECT b.*, IFNULL(COUNT(f.file_id), 0) AS file_count
+	    FROM board_post b
+	    LEFT JOIN board_file f ON b.board_id = f.board_id AND f.is_deleted = FALSE
+	    WHERE b.is_deleted = FALSE
+	    <if test="boardCode != null and boardCode != ''">
+	        AND b.board_code = #{boardCode}
 	    </if>
 	    <if test="keyword != null and keyword != ''">
 	        AND (
 	            <choose>
 	                <when test="condition == 'title'">
-	                    board_title LIKE CONCAT('%', #{keyword}, '%')
+	                    b.board_title LIKE CONCAT('%', #{keyword}, '%')
 	                </when>
 	                <when test="condition == 'content'">
-	                    board_content LIKE CONCAT('%', #{keyword}, '%')
+	                    b.board_content LIKE CONCAT('%', #{keyword}, '%')
 	                </when>
 	                <otherwise>
-	                    board_title LIKE CONCAT('%', #{keyword}, '%')
-	                    OR board_content LIKE CONCAT('%', #{keyword}, '%')
+	                    b.board_title LIKE CONCAT('%', #{keyword}, '%')
+	                    OR b.board_content LIKE CONCAT('%', #{keyword}, '%')
 	                </otherwise>
 	            </choose>
 	        )
 	    </if>
-	    ORDER BY created_at DESC
+	    GROUP BY b.board_id
+	    ORDER BY b.created_at DESC
 	    LIMIT #{offset}, #{size}
-	</select> 
+	</select>
 	
 	<!-- 전체 게시글 수 -->
 	<select id="getBoardListCnt" resultType="int" parameterType="SearchVO">
@@ -184,28 +188,30 @@
 	    </foreach>
 	</delete>
 	<!-- 게시글 상세보기시 첨부파일 목록 조회 -->
-	<select id="selectFilesByBoardId" parameterType="int" resultMap="BoardFileResultMap">
+	<select id="findFilesByPostId" parameterType="int" resultMap="BoardFileResultMap">
 	    SELECT * FROM board_file
 	    WHERE board_id = #{boardId} 
 	    AND is_deleted = FALSE
 	    ORDER BY uploaded_at ASC
 	</select>
 	
-	<select id="getFilesByIds" parameterType="list" resultType="BoardFileVO">
+	<!-- 기존 첨부파일 교체시 삭제할 대상으로 선택 -->
+	<select id="findFilesByIds" resultMap="BoardFileResultMap">
 	   SELECT * FROM board_file
 	   WHERE file_id IN
 	   <foreach item="id" collection="list" open="(" separator="," close=")">
 	       #{id}
 	   </foreach>
 	</select>
-
-	
-	
-	<select id="getFileIdsByBoardId" parameterType="int" resultType="int">
-	    SELECT file_id FROM board_file WHERE board_id = #{boardId}
+	<!-- 첨부파일 다운로드 -->
+	<select id="getFileById" parameterType="int" resultMap="BoardFileResultMap">
+	    SELECT * FROM board_file WHERE file_id = #{fileId}
 	</select>
 	
-	
+
+
+
+
 	
 	<!-- 아래부터 대시보드용 쿼리-->
 	<!-- 전체 게시글 수 (삭제 제외, 필터 없음)  -->
@@ -249,7 +255,7 @@
 	        p.user_uuid,
 	        p.created_at,
 	        p.view_cnt,
-	        COALESCE(f.cnt, 0) AS fileCount
+	        COALESCE(f.cnt, 0) AS file_count
 	    FROM board_post p	    	
 	    LEFT JOIN (
 	      SELECT bf.board_id, COUNT(*) AS cnt
