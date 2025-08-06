@@ -12,6 +12,8 @@
      <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/edit.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/include/topmenu.jsp" %>
+
 <!-- layout-container  -->
 <div class="layout-container">
 	
@@ -70,7 +72,7 @@
 						    		<div class="file-row">
 						    			<!-- 기존 파일명 -->
 						    			<input type="text" readonly value="${file.originalName}">							    			
-						    			<button type="button" class="btn-gray">첨부파일</button>
+						    			<button type="button" class="btn-file">첨부파일</button>
 						    			<button type="button" class="btn-delete">삭제</button>
 						    			<button type="button" class="btn-add">파일 추가</button>
 						    			
@@ -87,7 +89,7 @@
 					         <c:if test="${empty fileList}">
 						        <div class="file-row">
 						            <input type="text" readonly>
-						            <button type="button" class="btn-gray">첨부파일</button>
+						            <button type="button" class="btn-file">첨부파일</button>
 						            <button type="button" class="btn-delete">삭제</button>
 						            <button type="button" class="btn-add">파일 추가</button>
 						            <input type="file" name="uploadFiles" style="display: none;">
@@ -177,7 +179,7 @@ function addFileInput() {
 
     const labelBtn = document.createElement("button");
     labelBtn.type = "button";
-    labelBtn.className = "btn-gray";
+    labelBtn.className = "btn-file";
     labelBtn.textContent = "첨부파일";
 
     const delBtn = document.createElement("button");
@@ -236,7 +238,7 @@ function bindEventsToExistingRows() {
     rows.forEach(row => {
         const textInput = row.querySelector("input[type='text']");
         const fileInput = row.querySelector("input[type='file']");
-        const attachBtn = row.querySelector(".btn-gray");
+        const attachBtn = row.querySelector(".btn-file");
         const delBtn = row.querySelector(".btn-delete");
         const addBtn = row.querySelector(".btn-add");
 

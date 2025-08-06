@@ -12,10 +12,9 @@
     <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
     <!-- 게시판 리스트 전용 -->
     <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/list.css">
-    <!-- 대시보드용 상단문구 디자인 -->
-    <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/dashboard.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/include/topmenu.jsp" %>
 
 <!-- layout-container  -->
 <div class="layout-container">	
@@ -59,15 +58,15 @@
 		    </div>
 	    
     	<!-- ✅ 게시판 수정/삭제 후 메시지 표시 영역 -->
-	        <c:if test="${not empty okMessage}">
-			    <div class="alert alert-success">${okMessage}</div>
-			</c:if>			
-			<c:if test="${not empty errorMessage}">
-			    <div class="alert alert-error">${errorMessage}</div>
-			</c:if>			
-			<c:if test="${not empty warningMessage}">
-			    <div class="alert alert-warning">${warningMessage}</div>
-			</c:if>
+		<c:if test="${not empty requestScope.okMessage}">
+			<div class="alert alert-success">${requestScope.okMessage}</div>
+		</c:if>
+		<c:if test="${not empty requestScope.errorMessage}">
+			<div class="alert alert-error">${requestScope.errorMessage}</div>
+		</c:if>
+		<c:if test="${not empty requestScope.warningMessage}">
+			<div class="alert alert-warning">${requestScope.warningMessage}</div>
+		</c:if>
 
       
         <!-- 글쓰기, 검색 폼 -->
@@ -114,7 +113,7 @@
 					<col style="width: 80px">    <!-- 번호 -->
 					<col>                        <!-- 제목 -->
 					<col style="width: 60px">    <!-- 파일 --> 
-					<col style="width: 180px">   <!-- 작성자 -->
+					<col style="width: 140px">   <!-- 작성자 -->
 					<col style="width: 140px">   <!-- 게시일 -->
 					<col style="width: 100px">   <!-- 조회수 -->
 				</colgroup>

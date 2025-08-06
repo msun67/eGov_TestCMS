@@ -18,8 +18,10 @@
             background-color: #f5f5f5;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
 </head>
 <body>
+
 <!-- 수정 완료 메시지 출력 -->
 <c:if test="${not empty message}">
     <script>

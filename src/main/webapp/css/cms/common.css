@@ -1,9 +1,68 @@
+/* 탑 메뉴 스타일 */
+.topmenu-container {
+    display: flex;
+    height: 60px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Segoe UI', sans-serif;
+}
+.topmenu-left .topmenu-logo {
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    margin-left: 20px;
+}
+
+.topmenu-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.topmenu-user {
+    font-size: 14px;
+    color: #555;
+}
+
+.topmenu-logout {
+    font-size: 14px;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    background-color: #fff;
+    padding: 6px 10px;
+}
+
+.topmenu-logout:hover {
+    background-color: #007bff;
+    color: white;
+}
+.page-sub-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; margin-top: 3px; }
+.badge.success { background: #e8f5e9; color: #2e7d32; }
+.welcome { color: #4b5563; }
+.logout-form { display: inline; }
+
 /* 전체 레이아웃 */
 .layout-container {
     display: flex;
     min-height: 100vh;
-    font-family: Arial, sans-serif;
+    padding-top: 60px;
+    font-family: 'Segoe UI', sans-serif;
 }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+
+
+
 
 /* 좌측 메뉴 스타일 */
 .side-menu{
@@ -149,7 +208,7 @@
     height: 25px;
 }
 
-.btn-gray {
+.btn-file {
     background-color: #757575;
     color: white;
     border: none;

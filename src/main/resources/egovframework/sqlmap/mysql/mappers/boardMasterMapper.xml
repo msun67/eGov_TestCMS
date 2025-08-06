@@ -10,26 +10,41 @@
     <result property="description" column="description"/>
     <result property="useyn" column="use_yn"/>
     <result property="createdBy" column="created_by"/>
-    <result property="createdAt" column="created_at"/>
+    <result property="createdAt" column="created_at" javaType="java.util.Date"/>
 </resultMap>
 
+	<!-- 게시판 생성 폼 진입시 코드 보여주기용 -->
+	<select id="getNextBoardCode" resultType="String">
+	    SELECT CONCAT('BBS_', LPAD(
+	        IFNULL(MAX(CAST(SUBSTRING(board_code, 5) AS UNSIGNED)), 0) + 1, 6, '0')
+	    )
+	    FROM board_master
+	</select>
+	
+	<!-- 게시판 생성 -->
  	<insert id="insertBoard" parameterType="BoardMasterVO">
-        INSERT INTO board_master (board_code, board_name, description, created_by, created_at)
-        VALUES (#{boardCode}, #{boardName}, #{description}, #{createdBy}, NOW())
+        INSERT INTO board_master (
+		    board_code, board_name, description, use_yn, created_by, created_at
+		  ) VALUES (
+		    #{boardCode}, #{boardName}, #{description}, #{useyn}, #{createdBy}, NOW()
+		  )
     </insert>
 
+	<!-- 게시판 목록 전체 조회 -->
     <select id="selectBoardList" resultMap="BoardMasterResultMap">
-        SELECT board_code, board_name, description, created_by, created_at
+        SELECT board_code, board_name, description, use_yn, created_by, created_at
         FROM board_master
         ORDER BY created_at DESC
     </select>
 
+	<!-- 게시판 목록 단건 조회 (수정폼)-->
     <select id="selectBoardByCode" parameterType="String" resultMap="BoardMasterResultMap">
         SELECT board_code, board_name, description, created_by, created_at
         FROM board_master
         WHERE board_code = #{boardCode}
     </select>
     
+    <!-- 게시판 목록 단건 조회 (수정용)-->
     <update id="updateBoard" parameterType="BoardMasterVO">
 	    UPDATE board_master
 	    SET board_name = #{boardName},
@@ -37,10 +52,19 @@
 	    WHERE board_code = #{boardCode}
 	</update>
 	
+	<!-- 게시판 사용 여부 체크 -->
+	<update id="updateUseYn" parameterType="map">
+	    UPDATE board_master
+	    SET use_yn = #{useyn}
+	    WHERE board_code = #{boardCode}
+	</update>
+	
+	<!-- 게시판 물리삭제 -->
 	<delete id="deleteBoard" parameterType="String">
 	    DELETE FROM board_master WHERE board_code = #{boardCode}
 	</delete>
 	
+	<!-- 게시판 목록(좌측네비 노출용)-->
 	<select id="selectBoardMasterList" resultMap="BoardMasterResultMap">
         SELECT 
             board_code,

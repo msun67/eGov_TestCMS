@@ -1,12 +1,14 @@
 package egovframework.cms.board.service;
 
+import java.util.Date;
+
 public class BoardMasterVO {
 	private String boardCode;
 	private String boardName;
 	private String description;
 	private int useyn;
 	private String createdBy;
-	private String createdAt;
+	private Date createdAt;
 	
 	
 	public int getUseyn() {
@@ -39,10 +41,10 @@ public class BoardMasterVO {
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-	public String getCreatedAt() {
+	public Date getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(String createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 }

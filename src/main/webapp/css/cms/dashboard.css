@@ -45,7 +45,7 @@
 .page-sub-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .page-sub-right { display: flex; align-items: center; gap: 8px; }
 .logout-form { display: inline; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; margin-top: 3px; }
 .badge.success { background: #e8f5e9; color: #2e7d32; }
 .welcome { color: #4b5563; }
 .role { color: #6b7280; }

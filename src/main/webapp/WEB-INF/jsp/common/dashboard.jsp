@@ -35,8 +35,8 @@
 	    <sec:authorize access="hasRole('ROLE_ADMIN')">
 	        <div class="menu-section">관리자 전용 메뉴</div>
 	        <ul class="menu">
-	            <li class="menu-item ${fn:contains(requestURI, '/boardMaster/create.do') ? 'active' : ''}">
-	                <a href="<c:url value='/boardMaster/create.do'/>">👑 게시판 생성</a>
+	            <li class="menu-item ${fn:contains(requestURI, '/admin/boardMaster/create.do') ? 'active' : ''}">
+	                <a href="<c:url value='/admin/boardMaster/create.do'/>">👑 게시판 생성</a>
 	            </li>
 	            <li class="menu-item ${fn:contains(requestURI, '/admin/userList.do') ? 'active' : ''}">
 	                <a href="<c:url value=''/>">🧑‍🤝‍🧑 사용자 관리</a>

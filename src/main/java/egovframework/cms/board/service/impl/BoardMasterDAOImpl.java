@@ -16,6 +16,11 @@ public class BoardMasterDAOImpl implements BoardMasterDAO{
 	    public BoardMasterDAOImpl(SqlSession sqlSession) {
 	        this.sqlSession = sqlSession;
 	    }
+	    
+	    @Override
+	    public String getNextBoardCode() {
+	        return sqlSession.selectOne(namespace + ".getNextBoardCode");
+	    }
 
 	    @Override
 	    public void insertBoard(BoardMasterVO boardMasterVO) {
@@ -45,5 +50,13 @@ public class BoardMasterDAOImpl implements BoardMasterDAO{
 	    @Override
 	    public List<BoardMasterVO> selectBoardMasterList() {
 	        return sqlSession.selectList(namespace + ".selectBoardMasterList");
+	    }
+	    
+	    @Override
+	    public int updateUseYn(String boardCode, int useyn) {
+	        java.util.Map<String, Object> param = new java.util.HashMap<>();
+	        param.put("boardCode", boardCode);
+	        param.put("useyn", useyn);
+	        return sqlSession.update(namespace + ".updateUseYn", param);
 	    }
 }

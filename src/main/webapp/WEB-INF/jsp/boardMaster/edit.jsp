@@ -47,8 +47,10 @@
             }
         }
     </script>
+    <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/include/topmenu.jsp" %>
 
 <h2>✏️ 게시판 수정</h2>
 

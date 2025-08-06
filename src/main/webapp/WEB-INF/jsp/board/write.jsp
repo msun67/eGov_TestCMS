@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/edit.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/include/topmenu.jsp" %>
+
 <!-- layout-container  -->
 <div class="layout-container">
 
@@ -145,7 +147,7 @@ function addFileInput() {
 
     const labelBtn = document.createElement("button");
     labelBtn.type = "button";
-    labelBtn.className = "btn-gray";
+    labelBtn.className = "btn-file";
     labelBtn.textContent = "첨부파일";
     labelBtn.onclick = () => fileInput.click();
 

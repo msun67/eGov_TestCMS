@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/detail.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/include/topmenu.jsp" %>
+
 <!-- layout-container  -->
 <div class="layout-container">
 

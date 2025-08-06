@@ -1,6 +1,6 @@
 /* 게시판 테이블 스타일 */
 table {
-    width: 80%;
+    width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
     table-layout: fixed;
@@ -19,6 +19,7 @@ table td {
     overflow: hidden;
     text-overflow: ellipsis; /* 긴 내용 ... 표시 */
     white-space: nowrap; /* 한 줄 고정 */
+    text-align:center;
 }
 table td a{
 	color: #4f4f4f;
@@ -26,15 +27,6 @@ table td a{
 }
 table td a:hover {
     text-decoration: underline; /* hover 시만 밑줄 */
-}
-
-form {
-    margin-top: 20px;
-}
-
-form select, form input, form button {
-    padding: 6px 10px;
-    font-size: 14px;
 }
 
 .main-content h1 {
@@ -57,9 +49,24 @@ form select, form input, form button {
 .btn.primary{
   background:#3169c4; color:#fff; border:1px solid #3169c4;
   border-radius:8px; font-weight:600;
-   padding: 7px 10px; font-size: 13px;
+   padding: 7px 10px; font-size: 13px; margin-top:20px;
 }
 .btn.primary:hover{ filter:brightness(.95); }
+
+/*오른쪽 환영문구 옆 로그아웃버튼*/
+.page-sub { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+.page-sub-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.page-sub-right { display: flex; align-items: center; gap: 8px; }
+.page-sub-right { display: flex; align-items: center; gap: 8px; }
+.logout-form { display: inline; }
+.btn.small { padding: 6px 10px; font-size: 13px; margin-top: 20px;
+				display: inline-block; border: 1px solid #e5e7eb; 
+				border-radius: 8px; text-decoration: none; color: #374151; 
+				background: #fff; color: #374151; text-decoration: none; cursor: pointer;}
+.btn.small:hover { background: #f3f4f6; }
+.btn.primary { background: #007bff; color: #fff; border-color: #007bff; text-decoration: none;}
+.btn.primary:hover { background:#fff; color:#007bff; }
+
 
 /* 오른쪽 검색 영역: 남는 공간 차지 + 우측 정렬 */
 .board-actions{
@@ -75,6 +82,7 @@ form select, form input, form button {
   gap: 8px;
   align-items: center;
   margin: 0;
+  margin-top: 10px;
 }
 
 /* 인풋/버튼 높이 통일(선택) */
