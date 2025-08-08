@@ -9,6 +9,9 @@ public class BoardMasterVO {
 	private int useyn;
 	private String createdBy;
 	private Date createdAt;
+	// 게시판 생성시 글쓰기 권한 관련
+	private String writePermitType; // CSV 저장용
+	private String[] writePermitTypesArray; // 체크박스 전송용 (Spring이 자동 매핑)
 	
 	
 	public int getUseyn() {
@@ -47,4 +50,17 @@ public class BoardMasterVO {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
+	public String getWritePermitType() {
+		return writePermitType;
+	}
+	public void setWritePermitType(String writePermitType) {
+		this.writePermitType = writePermitType;
+	}
+	public String[] getWritePermitTypesArray() {
+		return writePermitTypesArray;
+	}
+	public void setWritePermitTypesArray(String[] writePermitTypesArray) {
+		this.writePermitTypesArray = writePermitTypesArray;
+	}
+	
 }

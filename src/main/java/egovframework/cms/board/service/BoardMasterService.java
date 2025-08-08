@@ -8,7 +8,9 @@ public interface BoardMasterService {
     List<BoardMasterVO> getBoardList();
     BoardMasterVO getBoardByCode(String boardCode);
     void updateBoard(BoardMasterVO boardMasterVO);
-    void deleteBoard(String boardCode);    
+    void removeBoardWithPosts(String boardCode) throws Exception;
+    //void deleteBoard(String boardCode)throws Exception;
     List<BoardMasterVO> getBoardMasterList();
     void updateUseYn(String boardCode, int useyn);
+    BoardMasterVO getBoardInfo(String boardCode);
 }

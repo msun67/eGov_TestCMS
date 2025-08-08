@@ -16,6 +16,7 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ import egovframework.cms.board.service.BoardVO;
 import egovframework.cms.board.service.SearchVO;
 
 import egovframework.cms.config.UploadConstants;
+import egovframework.cms.member.security.LoginVO;
 
 @Controller
 public class BoardController {
@@ -47,46 +49,71 @@ public class BoardController {
 		this.boardFileService = boardFileService;
 	}
 
-	// 게시글 목록
 	@GetMapping("/board.do")
 	public String boardList(@ModelAttribute("searchVO") SearchVO searchVO,
 	                        @RequestParam(value = "boardCode", required = false) String boardCode,
-	                        Model model) throws Exception {
+	                        Model model, Authentication auth) throws Exception {
 
-	    if (searchVO.getPage() < 1) searchVO.setPage(1); // 기본값
+		// ✅ 게시판 생성시 글쓰기 권한 가져오기 위해서 사용.
+	    BoardMasterVO board = null;
+	    boolean canWrite = false;
+
+	    if (boardCode != null && !boardCode.isEmpty()) {
+	        board = boardMasterService.getBoardInfo(boardCode);
+	        model.addAttribute("board", board);
+	        System.out.println("board: " + board);
+
+	        // ✅ 글쓰기 권한 체크
+	        if (auth != null && auth.isAuthenticated()) {
+	            LoginVO loginUser = (LoginVO) auth.getPrincipal();
+	            int userType = loginUser.getUserType();
+	            System.out.println("현재 로그인 사용자 타입: " + userType);
+
+	            if (userType == 0) {
+	                canWrite = true;
+	                System.out.println("글쓰기 가능 여부: " + canWrite);
+	            } else if (board != null && board.getWritePermitType() != null) {
+	            	System.out.println("board.getWritePermitType(): " + board.getWritePermitType());
+	                List<Integer> permitted = Arrays.stream(board.getWritePermitType().split(","))
+	                        .map(String::trim)
+	                        .map(Integer::parseInt)
+	                        .collect(Collectors.toList());
+	                		System.out.println("게시판 허용 타입: " + permitted);
+
+	                if (permitted.contains(userType)) {
+	                    canWrite = true;
+	                    System.out.println("글쓰기 가능 여부: " + canWrite);
+	                }
+	            }
+	        }
+	    }
 
 	    // boardCode를 SearchVO에 설정
 	    searchVO.setBoardCode(boardCode);
+	    if (searchVO.getPage() < 1) searchVO.setPage(1);
 
-	    // 전체 게시글 수 조회
 	    int totalCnt = boardService.getBoardListCnt(searchVO);
-
-	    // 총 페이지 수 계산
 	    int pageSize = searchVO.getSize();
 	    int totalPages = (int) Math.ceil((double) totalCnt / pageSize);
-
-	    // 현재 페이지가 총 페이지보다 크면 보정
 	    if (searchVO.getPage() > totalPages && totalPages > 0) {
 	        searchVO.setPage(totalPages);
 	    }
 
-	    // 게시글 리스트 조회
 	    List<BoardVO> boardList = boardService.getBoardList(searchVO);
-
-	    // 게시판 목록 조회 (좌측 네비게이션용)
 	    List<BoardMasterVO> boardMasterList = boardMasterService.getBoardMasterList();
 
-	    // 모델에 값 전달
 	    model.addAttribute("boardList", boardList);
 	    model.addAttribute("boardCode", boardCode);
 	    model.addAttribute("boardMasterList", boardMasterList);
 	    model.addAttribute("totalCnt", totalCnt);
 	    model.addAttribute("page", searchVO.getPage());
 	    model.addAttribute("pageSize", pageSize);
-	    model.addAttribute("totalPages", totalPages); 
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("canWrite", canWrite);
 
 	    return "board/list";
 	}
+
 
 	// 게시글 상세보기
 	@GetMapping("/detail.do")
@@ -193,6 +220,7 @@ public class BoardController {
 	        }
 	    }
 		redirect.addFlashAttribute("okMessage", "✅ 등록이 완료되었습니다.");	
+		
 		return "redirect:/board.do?boardCode=" + boardCode;
 		//return "board/write";
 	}

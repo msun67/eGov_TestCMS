@@ -43,7 +43,22 @@ public class BoardMasterDAOImpl implements BoardMasterDAO{
 	    }
 	    
 	    @Override
-	    public void deleteBoard(String boardCode) {
+	    public void softDeletePostsByBoardCode(String boardCode) throws Exception {
+	    	sqlSession.update(namespace + ".softDeletePostsByBoardCode", boardCode);
+	    }
+
+	    @Override
+	    public void archivePostsByBoardCode(String boardCode) throws Exception {
+	    	sqlSession.insert(namespace + ".archivePostsByBoardCode", boardCode);
+	    }
+	    
+	    @Override
+	    public void deletePostsByBoardCode(String boardCode) throws Exception {
+	    	sqlSession.delete(namespace + ".deletePostsByBoardCode", boardCode);
+	    }
+	    
+	    @Override
+	    public void deleteBoard(String boardCode) throws Exception{
 	        sqlSession.delete(namespace + ".deleteBoard", boardCode);
 	    }
 	    
@@ -58,5 +73,10 @@ public class BoardMasterDAOImpl implements BoardMasterDAO{
 	        param.put("boardCode", boardCode);
 	        param.put("useyn", useyn);
 	        return sqlSession.update(namespace + ".updateUseYn", param);
+	    }
+	    
+	    @Override
+	    public BoardMasterVO getBoardInfo(String boardCode) {
+	        return sqlSession.selectOne(namespace + ".getBoardInfo", boardCode);
 	    }
 }

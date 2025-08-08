@@ -73,25 +73,10 @@
         <div class="board-actions">
         
 	        <div class="board-toolbar">
-		        <c:if test="${not empty boardCode}">
-					<c:choose>
-				      <%-- 공지사항: 관리자만 글쓰기 노출 --%>
-				      <c:when test="${boardCode eq 'notice'}">
-				        <sec:authorize access="hasRole('ROLE_ADMIN')">
-				          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
-				             class="btn primary">글쓰기</a>
-				        </sec:authorize>
-				      </c:when>
-				
-				      <%-- 그 외 게시판: 로그인 사용자에게 노출 --%>
-				      <c:otherwise>
-				        <sec:authorize access="isAuthenticated()">
-				          <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
-				             class="btn primary">글쓰기</a>
-				        </sec:authorize>
-				      </c:otherwise>
-				    </c:choose>
-				 </c:if>
+		       <c:if test="${canWrite}">
+			    <a href="<c:url value='/write.do'><c:param name='boardCode' value='${boardCode}'/></c:url>"
+			       class="btn primary">글쓰기</a>
+			  </c:if>
 			 </div>
 		       	
 	        <form method="get" action="<c:url value='/board.do'/>" class="board-actions-form">

@@ -11,6 +11,7 @@
     <result property="useyn" column="use_yn"/>
     <result property="createdBy" column="created_by"/>
     <result property="createdAt" column="created_at" javaType="java.util.Date"/>
+    <result property="writePermitType" column="write_permit_type"/>
 </resultMap>
 
 	<!-- 게시판 생성 폼 진입시 코드 보여주기용 -->
@@ -24,9 +25,9 @@
 	<!-- 게시판 생성 -->
  	<insert id="insertBoard" parameterType="BoardMasterVO">
         INSERT INTO board_master (
-		    board_code, board_name, description, use_yn, created_by, created_at
+		    board_code, board_name, description, use_yn, created_by, created_at, write_permit_type
 		  ) VALUES (
-		    #{boardCode}, #{boardName}, #{description}, #{useyn}, #{createdBy}, NOW()
+		    #{boardCode}, #{boardName}, #{description}, #{useyn}, #{createdBy}, NOW(), #{writePermitType}
 		  )
     </insert>
 
@@ -39,7 +40,7 @@
 
 	<!-- 게시판 목록 단건 조회 (수정폼)-->
     <select id="selectBoardByCode" parameterType="String" resultMap="BoardMasterResultMap">
-        SELECT board_code, board_name, description, created_by, created_at
+        SELECT board_code, board_name, description, created_by, created_at, use_yn, write_permit_type
         FROM board_master
         WHERE board_code = #{boardCode}
     </select>
@@ -48,7 +49,9 @@
     <update id="updateBoard" parameterType="BoardMasterVO">
 	    UPDATE board_master
 	    SET board_name = #{boardName},
-	        description = #{description}
+	        description = #{description},
+	        use_yn = #{useyn}, 
+	        write_permit_type = #{writePermitType}
 	    WHERE board_code = #{boardCode}
 	</update>
 	
@@ -59,10 +62,50 @@
 	    WHERE board_code = #{boardCode}
 	</update>
 	
-	<!-- 게시판 물리삭제 -->
-	<delete id="deleteBoard" parameterType="String">
-	    DELETE FROM board_master WHERE board_code = #{boardCode}
+	<!-- 게시판 글쓰기 권한 확인 -->
+	<select id="getBoardInfo" parameterType="string" resultMap="BoardMasterResultMap">
+	    SELECT * FROM board_master
+	    WHERE board_code = #{boardCode}
+	</select>
+
+
+	<!-- 생성 된 게시판 삭제 로직 -->
+	<!-- 1. 게시판 삭제 시 해당 게시판의 게시글 Soft Delete -->
+	<update id="softDeletePostsByBoardCode" parameterType="String">
+	    UPDATE board_post
+	    SET is_deleted = TRUE,
+	        deleted_at = NOW()
+	    WHERE board_code = #{boardCode}
+	</update>	
+	<!-- 2. 게시판 삭제 시 해당 게시판의 게시글을 아카이브 테이블에 백업 -->
+	<insert id="archivePostsByBoardCode" parameterType="String">
+	    INSERT INTO board_post_archive (
+	        archive_id, user_uuid, board_code, archive_title, archive_content,
+	        archive_view_cnt, archived_at, deleted_at
+	    )
+	    SELECT
+	        bp.board_id,
+	        bp.user_uuid,
+	        bp.board_code,
+	        bp.board_title,
+	        bp.board_content,
+	        bp.view_cnt,
+	        NOW(),
+	        DATE_ADD(NOW(), INTERVAL 90 DAY)
+	    FROM board_post bp
+	    WHERE bp.board_code = #{boardCode}
+	</insert>
+	<!-- 3. FK 문제 방지를 위해 board_post에서 물리 삭제 -->
+	<delete id="deletePostsByBoardCode" parameterType="String">
+	    DELETE FROM board_post
+	    WHERE board_code = #{boardCode}
 	</delete>
+	<!-- 4. 게시판 물리삭제 -->
+	<delete id="deleteBoard" parameterType="String">
+	    DELETE FROM board_master 
+	    WHERE board_code = #{boardCode}
+	</delete>
+	
 	
 	<!-- 게시판 목록(좌측네비 노출용)-->
 	<select id="selectBoardMasterList" resultMap="BoardMasterResultMap">

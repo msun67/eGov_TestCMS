@@ -3,6 +3,7 @@ package egovframework.cms.board.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import egovframework.cms.board.service.BoardMasterService;
 import egovframework.cms.board.service.BoardMasterVO;
@@ -54,12 +55,7 @@ public class BoardMasterServiceImpl implements BoardMasterService {
 	    @Override
 	    public void updateBoard(BoardMasterVO boardMasterVO) {
 	        boardMasterDAO.updateBoard(boardMasterVO);
-	    }
-	    
-	    @Override
-	    public void deleteBoard(String boardCode) {
-	        boardMasterDAO.deleteBoard(boardCode);
-	    }
+	    }	    
 	    
 	    @Override
 	    public List<BoardMasterVO> getBoardMasterList() {
@@ -77,4 +73,28 @@ public class BoardMasterServiceImpl implements BoardMasterService {
 	            throw new IllegalArgumentException("존재하지 않는 boardCode: " + boardCode);
 	        }
 	    }
+	    
+	    @Override
+	    public BoardMasterVO getBoardInfo(String boardCode) {
+	    	if (boardCode == null || boardCode.isEmpty()) return null;
+	        return boardMasterDAO.getBoardInfo(boardCode);
+	    }
+	    
+	    @Override
+	    @Transactional
+	    public void removeBoardWithPosts(String boardCode) throws Exception {
+	        // 1. 해당 게시판의 게시글 Soft Delete
+	        boardMasterDAO.softDeletePostsByBoardCode(boardCode);
+	        // 2. 아카이브 테이블에 백업
+	        boardMasterDAO.archivePostsByBoardCode(boardCode);
+	        // 3. 게시글 물리 삭제 (FK 방지용)
+	        boardMasterDAO.deletePostsByBoardCode(boardCode);
+	        // 4. 게시판 물리 삭제
+	        boardMasterDAO.deleteBoard(boardCode);
+	    }
+
+		/*
+		 * @Override public void deleteBoard(String boardCode) throws Exception{
+		 * boardMasterDAO.deleteBoard(boardCode); }
+		 */
 }

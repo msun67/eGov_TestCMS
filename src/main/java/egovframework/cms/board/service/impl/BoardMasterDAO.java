@@ -9,7 +9,13 @@ public interface BoardMasterDAO {
     List<BoardMasterVO> selectBoardList();
     BoardMasterVO selectBoardByCode(String boardCode);
     void updateBoard(BoardMasterVO boardMasterVO);
-    void deleteBoard(String boardCode);
+    
+    void softDeletePostsByBoardCode(String boardCode) throws Exception;
+    void archivePostsByBoardCode(String boardCode) throws Exception;
+    void deletePostsByBoardCode(String boardCode) throws Exception;
+    void deleteBoard(String boardCode) throws Exception;
+    
     List<BoardMasterVO> selectBoardMasterList();
     int updateUseYn(String boardCode, int useyn);
+    BoardMasterVO getBoardInfo(String boardCode);
 }

@@ -248,9 +248,9 @@ body {
 .layout-container{
   /* flex → grid로 변경: 좌측 240 + 우측 1fr, 중앙 정렬, 좌우 여백 */
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 210px 1fr;
   gap: 24px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 24px auto;
   padding: 0 16px;
   box-sizing: border-box;
