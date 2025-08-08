@@ -63,8 +63,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("비밀번호가 잘못되었습니다.");
         }
+        
+       
         System.out.println("uuid = " + user.getUserUuid());
 
+        Authentication a = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        System.out.println("[PROVIDER return principal class=" + a.getPrincipal().getClass()
+            + ", loader=" + a.getPrincipal().getClass().getClassLoader());
+        
         return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 

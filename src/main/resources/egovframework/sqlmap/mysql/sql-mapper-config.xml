@@ -10,5 +10,6 @@
 		<typeAlias alias="BoardFileVO" type="egovframework.cms.board.service.BoardFileVO"/>
 		<typeAlias alias="LoginVO" type="egovframework.cms.member.security.LoginVO"/>
 		<typeAlias alias="SignupVO" type="egovframework.cms.member.vo.SignupVO"/>
+		<typeAlias alias="MyPageVO" type="egovframework.cms.mypage.vo.MyPageVO"/>
     </typeAliases>
 </configuration>

@@ -1,12 +1,13 @@
 package egovframework.cms.member.security;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class LoginVO implements UserDetails {
+public class LoginVO implements UserDetails, Serializable {
 
 	// 직렬화된 객체를 저장하고 다시 역직렬화할 때, 클래스 구조가 변경되었는지 체크하기 위한 용도
 	private static final long serialVersionUID = 1L;

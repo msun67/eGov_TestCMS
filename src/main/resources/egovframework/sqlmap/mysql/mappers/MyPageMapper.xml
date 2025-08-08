@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="egovframework.cms.mypage.service.impl.MyPageMapper">
+
+  <!-- 결과 매핑 -->
+  <resultMap id="MyPageMap" type="egovframework.cms.mypage.vo.MyPageVO">
+    <result column="user_no" property="userNo"/>
+    <result column="user_uuid" property="userUuid"/>
+    <result column="user_type" property="userType"/>
+    <result column="user_id" property="userId"/>
+    <result column="name" property="name"/>
+    <result column="phone" property="phone"/>
+    <result column="mobile" property="mobile"/>
+    <result column="address" property="address"/>
+    <result column="residence" property="residence"/>
+    <result column="signup_date" property="signupDate"/>
+  </resultMap>
+
+  <!-- 1) 세션(userId,userType)으로 내 정보 조회 -->
+  <select id="selectMyInfo" resultMap="MyPageMap">
+    SELECT
+      ud.user_no,
+      ud.user_uuid,
+      ud.user_type,
+      ud.user_id,
+      ud.name,
+      ud.phone,
+      ud.mobile,
+      ud.address,
+      ud.residence,
+      DATE_FORMAT(ud.signup_date, '%Y-%m-%d %H:%i:%s') AS signup_date
+    FROM user_details ud
+    WHERE ud.user_id = #{userId}
+      AND ud.user_type = #{userType}
+    LIMIT 1
+  </select>
+
+  <!-- 2) 내 정보 수정 -->
+  <update id="updateMyInfo" parameterType="MyPageVO">
+    UPDATE user_details
+    SET
+      name = #{name},
+      phone = #{phone},
+      mobile = #{mobile},
+      address = #{address},
+      residence = #{residence}
+    WHERE user_no = #{userNo}
+  </update>
+
+  <!-- 3) 현재 비밀번호 해시 -->
+  <select id="selectCurrentPassword" resultType="string">
+    SELECT password
+    FROM user_details
+    WHERE user_no = #{userNo}
+    LIMIT 1
+  </select>
+
+  <!-- 4) 비밀번호 업데이트 -->
+  <update id="updatePassword">
+    UPDATE user_details
+    SET password = #{encPassword}
+    WHERE user_no = #{userNo}
+  </update>
+
+  <!-- 5) 비밀번호 이력 저장 -->
+  <insert id="insertPasswordHistory">
+    INSERT INTO password_history (user_no, password, user_type)
+    VALUES (#{userNo}, #{encPassword}, #{userType})
+  </insert>
+
+  <!-- 6) 직후 INSERT의 AUTO_INCREMENT id (MySQL) -->
+  <select id="selectLastInsertId" resultType="int">
+    SELECT LAST_INSERT_ID()
+  </select>
+
+  <!-- 7) 사용자 기준 가장 최근 pw_id (백업용) -->
+  <select id="selectLatestPwIdByUser" resultType="int">
+    SELECT pw_id
+    FROM password_history
+    WHERE user_no = #{userNo}
+    ORDER BY change_date DESC, pw_id DESC
+    LIMIT 1
+  </select>
+
+  <!-- 8) users.latest_pw_id 갱신 -->
+  <update id="updateLatestPwId">
+    UPDATE users
+    SET latest_pw_id = #{pwId}
+    WHERE user_no = #{userNo}
+  </update>
+
+
+
+</mapper>

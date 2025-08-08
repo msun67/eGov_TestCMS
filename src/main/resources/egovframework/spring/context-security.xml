@@ -34,7 +34,9 @@
 
         <!-- 🔹 form-login 대신 Custom Filter 사용 -->
         <custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter"/>
-
+		
+		<!-- ✅ 요청마다 principal/userId/userType 덤프 -->
+		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="securityDumpFilter"/>
 		
         <logout logout-url="/logout.do" logout-success-url="/main.do" invalidate-session="true"  delete-cookies="JSESSIONID"/>
         
@@ -87,5 +89,9 @@
     <!-- ✅ 게시판 게시글 소유자/관리자 확인 -->
     <beans:bean id="boardSecurity" 
     			class="egovframework.cms.member.security.board.BoardSecurity"/>  
+	
+	<!-- ✅ 로그인 직후엔 값이 있는데 특정 요청에서 사라지는 패턴 확인 -->
+	<beans:bean id="securityDumpFilter"
+            class="egovframework.cms.member.security.filter.SecurityDumpFilter"/>
 
 </beans:beans>

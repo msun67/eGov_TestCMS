@@ -21,6 +21,7 @@
 	<!-- MapperConfigurer 설정 -->
 	<bean
 		class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="egovframework.cms.member.security.service.impl, egovframework.cms.member.service.impl" />
+		<property name="basePackage" value="egovframework.cms.member.security.service.impl, 
+										egovframework.cms.member.service.impl, egovframework.cms.mypage.service.impl" />
 	</bean>
 </beans>

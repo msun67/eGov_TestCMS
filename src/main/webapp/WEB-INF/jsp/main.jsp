@@ -78,6 +78,13 @@
 </head>
 <body>
 		<div class="container">
+		
+		<c:if test="${not empty param.okMessage}">
+			<div class="alert alert-success">
+			  ${param.okMessage}
+			</div>
+		</c:if>
+
 		<h1>로그인</h1>
 		<form action="${pageContext.request.contextPath}/loginProcess.do" method="post">
 			<!-- ✅ CSRF 토큰 추가 -->

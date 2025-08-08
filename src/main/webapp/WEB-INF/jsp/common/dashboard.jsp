@@ -24,7 +24,7 @@
 	            <a href="<c:url value='/dashboard.do'/>">🏠 대시보드</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/profile.do') ? 'active' : ''}">
-	            <a href="<c:url value=''/>">🙋‍♂️ 내 정보</a>
+	            <a href="<c:url value='/mypage/view.do'/>">🙋‍♂️ 내 정보</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/board.do') ? 'active' : ''}">
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
