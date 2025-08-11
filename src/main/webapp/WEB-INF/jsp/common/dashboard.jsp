@@ -8,13 +8,15 @@
 <head>
     <meta charset="UTF-8">
     <title>대시보드</title>
+    <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
     <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/dashboard.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/include/topmenu.jsp" %>
 
 <c:set var="requestURI" value="${pageContext.request.requestURI}" />
 
-<div class="layout">
+<div class="layout-container">
     <!-- 좌측 사이드바 -->
     <aside class="sidebar">
         <div class="sidebar-title">공통 메뉴</div>
@@ -24,7 +26,7 @@
 	            <a href="<c:url value='/dashboard.do'/>">🏠 대시보드</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/profile.do') ? 'active' : ''}">
-	            <a href="<c:url value='/mypage/view.do'/>">🙋‍♂️ 내 정보</a>
+	            <a href="<c:url value='/mypage/verify.do'/>">🙋‍♂️ 내 정보</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/board.do') ? 'active' : ''}">
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
@@ -66,7 +68,7 @@
     </aside>
 
     <!-- 우측 콘텐츠 -->
-    <main class="content">
+    <main class="main-content">
         <!-- 페이지 타이틀/알림 -->
         <div class="page-header">
             <h1>대시보드</h1>

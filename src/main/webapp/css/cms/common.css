@@ -71,7 +71,7 @@ body {
   border-radius: 12px;
   padding: 12px;
   /* 기존 border-right 제거(중복선 방지) */
-  border-right: none;
+ /* border-right: none;*/
 }
 
 /* (있다면) 헤더는 박스 내부 제목으로 축소 */

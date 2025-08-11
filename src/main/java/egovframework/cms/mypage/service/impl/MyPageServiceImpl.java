@@ -20,6 +20,14 @@ public class MyPageServiceImpl implements MyPageService{
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    
+    @Override //검증
+    public boolean verifyCurrentPassword(String userId, int userType, String currentPw) {
+        MyPageVO me = mapper.selectMyInfo(userId, userType);
+        if (me == null) return false;
+        String currentHash = mapper.selectCurrentPassword(me.getUserNo());
+        return currentHash != null && passwordEncoder.matches(currentPw, currentHash);
+    }
 
     @Override
     public MyPageVO getMyInfo(String userId, int userType) {

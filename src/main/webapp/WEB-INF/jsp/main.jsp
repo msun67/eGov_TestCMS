@@ -75,6 +75,8 @@
   </style>
 <head>
 <title>CMS메인화면</title>
+<!-- 공통스타일 (네비게이션 + 우측 영역) -->
+<link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
 </head>
 <body>
 		<div class="container">
@@ -82,6 +84,11 @@
 		<c:if test="${not empty param.okMessage}">
 			<div class="alert alert-success">
 			  ${param.okMessage}
+			</div>
+		</c:if>
+		<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+			<div class="alert alert-error">
+			 ❌ ${SPRING_SECURITY_LAST_EXCEPTION}
 			</div>
 		</c:if>
 
@@ -101,11 +108,11 @@
 			<a href="<c:url value='/signup.do'/>" class="link">회원가입 </a>
 		</form>		
 
-		<!-- 오류 메시지 출력 -->
+		<!-- 오류 메시지 출력
 		<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
 			<p style="color:red;">❌ ${SPRING_SECURITY_LAST_EXCEPTION}</p>
 			<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
-		</c:if>
+		</c:if> -->
 	</div>		
 </body>
 </html>

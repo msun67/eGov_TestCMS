@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <title>게시판 생성</title>
 <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
+<link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/dashboard.css">
 
 <!-- ===== Page-local styles (bm- 접두사로만 정의: common.css와 충돌 회피) ===== -->
 <style>
@@ -295,7 +296,55 @@
 	
 	<!-- layout-container  -->
 	<div class="layout-container">
-	<%@ include file="/WEB-INF/jsp/include/leftmenu.jsp" %>
+	<!-- 좌측 사이드바 -->
+    <aside class="sidebar">
+        <div class="sidebar-title">공통 메뉴</div>
+        <!-- 공통 메뉴 -->
+	    <ul class="menu">
+	        <li class="menu-item ${fn:contains(requestURI, '/dashboard.do') ? 'active' : ''}">
+	            <a href="<c:url value='/dashboard.do'/>">🏠 대시보드</a>
+	        </li>
+	        <li class="menu-item ${fn:contains(requestURI, '/profile.do') ? 'active' : ''}">
+	            <a href="<c:url value='/mypage/verify.do'/>">🙋‍♂️ 내 정보</a>
+	        </li>
+	        <li class="menu-item ${fn:contains(requestURI, '/board.do') ? 'active' : ''}">
+	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
+	        </li>
+	    </ul>
+	
+	    <!-- 관리자 전용 메뉴 -->
+	    <sec:authorize access="hasRole('ROLE_ADMIN')">
+	        <div class="menu-section">관리자 전용 메뉴</div>
+	        <ul class="menu">
+	            <li class="menu-item ${fn:contains(requestURI, '/admin/boardMaster/create.do') ? 'active' : ''}">
+	                <a href="<c:url value='/admin/boardMaster/create.do'/>">👑 게시판 생성</a>
+	            </li>
+	            <li class="menu-item ${fn:contains(requestURI, '/admin/userList.do') ? 'active' : ''}">
+	                <a href="<c:url value=''/>">🧑‍🤝‍🧑 사용자 관리</a>
+	            </li>
+	        </ul>
+	    </sec:authorize>
+	
+	    <!-- 일반 사용자 메뉴 (필요 시 항목 추가) -->
+	    <sec:authorize access="hasRole('ROLE_USER')">
+	        <div class="menu-section">사용자 전용 메뉴</div>
+	        <ul class="menu">
+	            <li class="menu-item ${fn:contains(requestURI, '/my/posts.do') ? 'active' : ''}">
+	                <a href="<c:url value=''/>">📚 내가 쓴 글</a>
+	            </li>
+	        </ul>
+	    </sec:authorize>
+	
+	    <!-- 부서원 메뉴 -->
+	    <sec:authorize access="hasRole('ROLE_ORG')">
+	    	<div class="menu-section">부서원 전용 메뉴</div>
+	        <ul class="menu">
+	            <li class="menu-item ${fn:contains(requestURI, '/org/orglist.do') ? 'active' : ''}">
+	                <a href="<c:url value=''/>">🏢 조직원 관리</a>
+	            </li>
+	        </ul>
+	    </sec:authorize>
+    </aside>
 
 		<div class="main-content">		
 			<!-- ✅ 성공/안내 메시지(Flash) -->
