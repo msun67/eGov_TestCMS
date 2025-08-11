@@ -12,6 +12,7 @@ public class SignupVO {
     private String mobile;
     private String address;
     private String residence;
+    private String signupIp;
     
 	public int getUserNo() {
 		return userNo;
@@ -79,6 +80,12 @@ public class SignupVO {
 	}
 	public void setResidence(String residence) {
 		this.residence = residence;
+	}
+	public String getSignupIp() {
+		return signupIp;
+	}
+	public void setSignupIp(String signupIp) {
+		this.signupIp = signupIp;
 	}
 	
 }

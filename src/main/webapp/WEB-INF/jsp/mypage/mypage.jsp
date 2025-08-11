@@ -126,7 +126,7 @@
 			        <span class="badge success">
 			          <sec:authorize access="hasRole('ROLE_ADMIN')">관리자</sec:authorize>
 			          <sec:authorize access="hasRole('ROLE_USER')">사용자</sec:authorize>
-			          <sec:authorize access="hasRole('ROLE_ORG')">조직원</sec:authorize>
+			          <sec:authorize access="hasRole('ROLE_ORG')">부서원</sec:authorize>
 			        </span>
 			      </div>
 			    </div>
@@ -152,7 +152,7 @@
 			              <c:choose>
 			                <c:when test="${me.userType == 0}">관리자</c:when>
 			                <c:when test="${me.userType == 1}">사용자</c:when>
-			                <c:otherwise>조직원</c:otherwise>
+			                <c:otherwise>부서원</c:otherwise>
 			              </c:choose>
 			            </div>
 			          </div>

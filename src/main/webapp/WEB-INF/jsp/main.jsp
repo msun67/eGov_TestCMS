@@ -79,19 +79,19 @@
 <link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
 </head>
 <body>
-		<div class="container">
+<div class="container">
 		
-		<c:if test="${not empty param.okMessage}">
-			<div class="alert alert-success">
-			  ${param.okMessage}
-			</div>
-		</c:if>
-		<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-			<div class="alert alert-error">
-			 ❌ ${SPRING_SECURITY_LAST_EXCEPTION}
-			</div>
-		</c:if>
-
+	<c:if test="${not empty param.okMessage}">
+		<div class="alert alert-success">
+		  ${param.okMessage}
+		</div>
+	</c:if>
+	<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+		<div class="alert alert-error">
+		 ❌ ${SPRING_SECURITY_LAST_EXCEPTION}
+		</div>
+	</c:if>
+	
 		<h1>로그인</h1>
 		<form action="${pageContext.request.contextPath}/loginProcess.do" method="post">
 			<!-- ✅ CSRF 토큰 추가 -->

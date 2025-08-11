@@ -8,9 +8,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import egovframework.cms.member.security.LoginVO;
+import egovframework.cms.member.security.service.LoginAuditService;
 
 @Service("userLoginService")
-public class UserLoginServiceImpl implements UserDetailsService{
+public class UserLoginServiceImpl implements UserDetailsService, LoginAuditService{
 	@Resource
     private UserLoginMapper userLoginMapper;
 
@@ -37,6 +38,19 @@ public class UserLoginServiceImpl implements UserDetailsService{
         System.out.println("✅ loadUserByUsername userType = " + user.getUserType());
         
         return user;
+    }
+    
+    // LoginAuditService 구현
+    // 로그인 성공 시 갱신 (NOW(), 상태=1, IP)
+    @Override
+    public void logLoginSuccess(String userUuid, String ip) {
+        userLoginMapper.updateLoginSuccessByUuid(userUuid, ip);
+    }
+
+    // 로그아웃 시 갱신 (마지막 로그인 시간, 상태=0)
+    @Override
+    public void logLogout(String userUuid) {
+        userLoginMapper.updateLogoutByUuid(userUuid);
     }
 
 }

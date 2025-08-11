@@ -38,7 +38,9 @@
 		<!-- ✅ 요청마다 principal/userId/userType 덤프 -->
 		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="securityDumpFilter"/>
 		
-        <logout logout-url="/logout.do" logout-success-url="/main.do" invalidate-session="true"  delete-cookies="JSESSIONID"/>
+		<!-- ✅ 로그아웃시 -->
+        <logout logout-url="/logout.do" invalidate-session="true"  delete-cookies="JSESSIONID"
+        		success-handler-ref="customLogoutSuccessHandler"/>
         
         <!-- ✅ 게시판 권한 거부 시: /board.do로 리다이렉트 + 세션 메시지 -->
     	<access-denied-handler ref="customSecurityHandler"/>
@@ -85,6 +87,10 @@
     <!-- ✅ 로그인 실패 + 권한 거부를 겸임하는 핸들러 -->            
     <beans:bean id="customSecurityHandler"
                 class="egovframework.cms.member.security.handler.CustomSecurityHandler"/>
+                
+    <!-- ✅ 로그아웃 체크 핸들러 -->   
+    <beans:bean id="customLogoutSuccessHandler"
+            class="egovframework.cms.member.security.handler.CustomLogoutSuccessHandler"/>
     
     <!-- ✅ 게시판 게시글 소유자/관리자 확인 -->
     <beans:bean id="boardSecurity" 

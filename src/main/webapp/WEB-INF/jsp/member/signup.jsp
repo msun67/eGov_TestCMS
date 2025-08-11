@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
 <title>회원 가입</title>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!-- 공통스타일 (네비게이션 + 우측 영역) -->
+<link rel="stylesheet" type="text/css" href="/demo_cms/css/cms/common.css">
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body { background-color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -82,6 +84,16 @@
 </style>
 
 <div class ="container">
+	<c:if test="${not empty param.okMessage}">
+		<div class="alert alert-success">
+		  ${param.okMessage}
+		</div>
+	</c:if>
+	<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+		<div class="alert alert-error">
+		 ❌ ${SPRING_SECURITY_LAST_EXCEPTION}
+		</div>
+	</c:if>
 	<h2>회원가입</h2>
 	<form action="${pageContext.request.contextPath}/signupProcess.do" method="post">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

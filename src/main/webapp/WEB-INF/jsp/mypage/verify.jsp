@@ -80,7 +80,7 @@
    	<div class="main-content">
 		<div class="verify-wrap">
 		  <h1>본인 확인</h1>
-		  <p class="muted">마이페이지에 접근하기 전에 현재 비밀번호를 한번 더 입력해주세요.</p>
+		  <p class="muted">내 정보에 접근하기 전에 현재 비밀번호를 한번 더 입력해주세요.</p>
 		
 		  <c:if test="${not empty requestScope.errorMessage}">
 		    <div class="alert alert-error">${requestScope.errorMessage}</div>

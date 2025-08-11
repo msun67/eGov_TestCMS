@@ -11,9 +11,9 @@
 	<!-- 이후 user_details테이블에 user테이블 정보를 가지고 후등록-->
     <insert id="insertUserDetails" parameterType="SignupVO">
         INSERT INTO user_details (
-            user_no, user_uuid, user_id, password, name, user_type, phone, mobile, address, residence
+            user_no, user_uuid, user_id, password, name, user_type, phone, mobile, address, residence, signup_ip
         ) VALUES (
-            #{userNo}, #{userUuid}, #{userId}, #{password}, #{name}, #{userType},#{phone},#{mobile},#{address}, #{residence}
+            #{userNo}, #{userUuid}, #{userId}, #{password}, #{name}, #{userType},#{phone},#{mobile},#{address}, #{residence}, #{signupIp}
         )
     </insert>
     
