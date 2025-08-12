@@ -55,6 +55,9 @@
   .modal .foot{padding:12px 16px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:8px;}
   .oktxt{color:#16a34a} .errtxt{color:#dc2626}
   .okbd{border-color:#16a34a !important} .errbd{border-color:#dc2626 !important}
+  #zip,#roadAddr,#detailAddr{margin:6px 0}
+  .error-msg{color:#ef4444;font-size:12px;margin-top:6px;display:block}
+  
   @media (max-width: 980px){ .grid{grid-template-columns:1fr} .wrap{grid-template-columns:1fr} }
 </style>
 </head>
@@ -182,15 +185,28 @@
 			            <div class="row">
 			              <div>
 			                <label for="phone">전화</label>
-			                <input type="tel" id="phone" name="phone" value="${me.phone}" maxlength="20" placeholder="02-123-4567"/>
+			                <input type="tel" id="phone" name="phone" value="${me.phone}" maxlength="20"/>
 			              </div>
 			              <div>
 			                <label for="mobile">휴대전화</label>
-			                <input type="tel" id="mobile" name="mobile" value="${me.mobile}" maxlength="20" placeholder="010-1234-5678"/>
+			                <input type="tel" id="mobile" name="mobile" value="${me.mobile}" maxlength="20" />
 			              </div>
 			            </div>
-			            <label for="address">주소</label>
-			            <textarea id="address" name="address" maxlength="500">${me.address}</textarea>
+			            <label>주소</label>
+						<div class="row" style="align-items:end">
+						<div>
+						  <input type="text" id="zip" placeholder="우편번호" readonly>
+						</div>
+						<div>
+						  <button type="button" class="btn" id="btnPostcode">주소검색</button>
+						</div>
+						</div>
+						<input type="text" id="roadAddr" placeholder="도로명주소" readonly>
+						<input type="text" id="detailAddr" placeholder="상세주소 입력">
+						<small id="addressError" class="err"></small>
+						
+						<!-- 서버로 보낼 최종 주소 -->
+						<input type="hidden" id="address" name="address" value="${me.address}">
 			            <div class="right">
 			              <button type="submit" class="btn primary">변경 사항 저장</button>
 			            </div>
@@ -230,7 +246,100 @@
   </div>
 </div>
 
+<!-- 다음주소검색 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 <script>
+//주소 수정
+(function(){
+  // DOM 로드 후 실행
+  window.addEventListener('DOMContentLoaded', function(){
+    // ① 저장된 주소를 화면에 뿌림
+    hydrateAddress('${fn:escapeXml(me.address)}');
+
+    // ② 입력이 바뀔 때마다 hidden 채우기
+    ['zip','roadAddr','detailAddr'].forEach(id=>{
+      const el = document.getElementById(id);
+      el && el.addEventListener('input', composeAddress);
+    });
+
+    // ③ 주소검색 버튼
+    const btn = document.getElementById('btnPostcode');
+    btn && btn.addEventListener('click', openPostcode);
+  });
+
+  // 저장 포맷: "(13529) 경기 성남시 분당구 판교역로 166 502호"
+  function hydrateAddress(stored){
+    const zipEl    = document.getElementById('zip');
+    const roadEl   = document.getElementById('roadAddr');
+    const detailEl = document.getElementById('detailAddr');
+    if(!zipEl || !roadEl || !detailEl) return; // id 불일치 방지
+
+    // 초기화
+    zipEl.value = '';
+  	roadEl.value = '';
+  	detailEl.value = '';
+  	
+  	const raw = (stored || '').trim();
+    if(!raw) return;
+    
+    
+    // 1) (12345) 분리
+    const m = raw.match(/^\s*\((\d{5})\)\s*(.*)$/);
+    let rest = raw;
+    if (m){
+      zipEl.value = m[1];
+      rest = m[2]; // "도로명 ... [공백] [상세]"
+    }
+
+    // 2) 신규 권장 포맷 우선: "도로명 || 상세"
+    if (rest.includes(' || ')) {
+      const [road, detail=''] = rest.split(' || ');
+      roadEl.value = road;
+      detailEl.value = detail;
+      return;
+    }
+
+    // 3) 구분자 없는 기존 포맷 대응
+    //   - 카카오 roadAddress는 이미 충분히 길어요. 상세는 '사용자가 추가한 꼬리'라 가정.
+    //   - 최소 손실 전략: 마지막 공백 기준으로 분리(상세가 1토큰이라도 상세칸에 들어가게).
+    //   - 상세가 실제로 여러 토큰이면, 아래 주석의 '고급 분해'로 교체 검토.
+    const lastSpace = rest.lastIndexOf(' ');
+    if (lastSpace > -1) {
+      roadEl.value   = rest.slice(0, lastSpace).trim();
+      detailEl.value = rest.slice(lastSpace + 1).trim();
+    } else {
+      // 공백 없으면 전부 도로명으로
+      roadEl.value = rest;
+    }
+    composeAddress(); // hidden 채우기
+  }
+
+  // hidden address에 최종 문자열 합치기
+  function composeAddress(){
+    const zip    = document.getElementById('zip')?.value.trim() || '';
+    const road   = document.getElementById('roadAddr')?.value.trim() || '';
+    const detail = document.getElementById('detailAddr')?.value.trim() || '';
+    const hidden = document.getElementById('address');
+    if (!hidden) return;
+    hidden.value = (zip && road) ? '(' + zip + ') ' + road + (detail ? ' ' + detail : '')
+    	    : '';
+  }
+
+  // 다음 주소검색
+  function openPostcode(){
+    new daum.Postcode({
+      oncomplete: function(data){
+        document.getElementById('zip').value      = data.zonecode || '';
+        document.getElementById('roadAddr').value = data.roadAddress || data.address || '';
+        document.getElementById('detailAddr').focus();
+        composeAddress();
+        document.getElementById('addressError').innerText = '';
+      }
+    }).open();
+  }
+})();
+
 // modal open/close
 const $ = (s)=>document.querySelector(s);
 const openPw= $('#openPw'), modal=$('#pwModal'), bd=$('#pwBackdrop'),

@@ -31,6 +31,9 @@
 	        <li class="menu-item ${fn:contains(requestURI, '/board.do') ? 'active' : ''}">
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
 	        </li>
+	        <li class="menu-item ${fn:contains(requestURI, '/posts.do') ? 'active' : ''}">
+	                <a href="<c:url value=''/>">📚 내가 쓴 글</a>
+	        </li>
 	    </ul>
 	
 	    <!-- 관리자 전용 메뉴 -->
@@ -50,8 +53,8 @@
 	    <sec:authorize access="hasRole('ROLE_USER')">
 	        <div class="menu-section">사용자 전용 메뉴</div>
 	        <ul class="menu">
-	            <li class="menu-item ${fn:contains(requestURI, '/my/posts.do') ? 'active' : ''}">
-	                <a href="<c:url value=''/>">📚 내가 쓴 글</a>
+	            <li class="menu-item ${fn:contains(requestURI, '/user/posts.do') ? 'active' : ''}">
+	                <a href="<c:url value=''/>">💬 1:1 상담문의</a>
 	            </li>
 	        </ul>
 	    </sec:authorize>

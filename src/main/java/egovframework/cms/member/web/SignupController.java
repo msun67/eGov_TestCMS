@@ -54,6 +54,8 @@ public class SignupController {
 
         userSignupService.register(signupVO);
         
+        System.out.println("address="+signupVO.getAddress());
+        
         String msg = URLEncoder.encode("✔️ 회원가입이 완료되었습니다. 로그인 해주세요.", StandardCharsets.UTF_8);
         return "redirect:/main.do?okMessage=" + msg;
     }
