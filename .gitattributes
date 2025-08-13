@@ -2,3 +2,4 @@
 src/main/webapp/resources/smarteditor/**/*.php linguist-vendored
 src/main/webapp/resources/smarteditor/**/*.js  linguist-vendored
 src/main/webapp/resources/smarteditor/sample/** linguist-vendored
+src/main/webapp/resources/smarteditor/**/*.html linguist-vendored
