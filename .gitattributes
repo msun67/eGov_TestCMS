@@ -1,0 +1,4 @@
+# SmartEditor 관련 PHP, JS 전부 언어 통계에서 제외
+src/main/webapp/resources/smarteditor/**/*.php linguist-vendored
+src/main/webapp/resources/smarteditor/**/*.js  linguist-vendored
+src/main/webapp/resources/smarteditor/sample/** linguist-vendored
