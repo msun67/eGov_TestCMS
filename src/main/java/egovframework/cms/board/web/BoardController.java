@@ -304,4 +304,41 @@ public class BoardController {
 	    }
 	    return "redirect:/board.do?boardCode=" + boardCode;
 	}
+	
+	//내가 쓴 글
+	@GetMapping("/posts.do")
+	@PreAuthorize("isAuthenticated()")
+	public String myPosts(@ModelAttribute("searchVO") SearchVO searchVO,
+	                      @RequestParam(value = "boardCode", required = false) String boardCode,
+	                      Model model, Authentication auth) throws Exception {
+
+	    LoginVO login = (LoginVO) auth.getPrincipal();
+	    String authorUuid = login.getUserUuid(); // 또는 getUserId()
+
+	    searchVO.setBoardCode(boardCode);              // 특정 게시판만 보고 싶으면 유지, 전체면 null/빈문자
+	    if (searchVO.getPage() < 1) searchVO.setPage(1);
+
+	    int totalCnt = boardService.getBoardListCntByAuthor(searchVO, authorUuid);
+	    int pageSize = searchVO.getSize();
+	    int totalPages = (int)Math.ceil((double)totalCnt / pageSize);
+	    if (searchVO.getPage() > totalPages && totalPages > 0) {
+	        searchVO.setPage(totalPages);
+	    }
+
+	    List<BoardVO> boardList = boardService.getBoardListByAuthor(searchVO, authorUuid);
+	    List<BoardMasterVO> boardMasterList = boardMasterService.getBoardMasterList();
+
+	    model.addAttribute("boardList", boardList);
+	    model.addAttribute("boardCode", boardCode);
+	    model.addAttribute("boardMasterList", boardMasterList);
+	    model.addAttribute("totalCnt", totalCnt);
+	    model.addAttribute("page", searchVO.getPage());
+	    model.addAttribute("pageSize", pageSize);
+	    model.addAttribute("totalPages", totalPages);
+
+	    model.addAttribute("myPosts", true);  // JSP에서 제목/버튼 제어용
+	    model.addAttribute("canWrite", false);// 내 글 모아보기에서는 글쓰기 숨김(선택)
+
+	    return "board/list";
+	}
 }

@@ -80,6 +80,9 @@
 	        <li class="menu-item ${fn:contains(requestURI, '/board.do') ? 'active' : ''}">
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
 	        </li>
+	        <li class="menu-item ${fn:contains(requestURI, '/posts.do') ? 'active' : ''}">
+	           <a href="<c:url value=''/>">📚 내가 쓴 글</a>
+	        </li>
 	    </ul>
 	
 	    <!-- 관리자 전용 메뉴 -->
@@ -434,7 +437,7 @@ submitPw.addEventListener('click', ()=>{
   $('#pwForm').submit();
 });
 
- // simple phone cleanup
+ // simple phone cleanup 불필요 문자 제거
  ['#phone','#mobile'].forEach(id=>{
    const el=$(id); if(!el) return;
    el.addEventListener('blur', function(){ this.value=this.value.replace(/[^\d\-]/g,'').replace(/\-+/g,'-'); });

@@ -24,12 +24,14 @@
     <div class="main-content">
     
 		<%-- ✅ 헤더에서 사용할 보드명 계산 (먼저 정의) --%>
-	    <c:set var="boardName" value="전체 글 목록"/>
-	    <c:forEach var="bm" items="${boardMasterList}">
-	      <c:if test="${bm.boardCode == boardCode}">
-	        <c:set var="boardName" value="${bm.boardName}"/>
-	      </c:if>
-	    </c:forEach>
+	    <c:set var="boardName" value="${myPosts ? '내가 쓴 글' : '전체 글 목록'}"/>
+	    <c:if test="${!myPosts}">
+		  <c:forEach var="bm" items="${boardMasterList}">
+		    <c:if test="${bm.boardCode == boardCode}">
+		      <c:set var="boardName" value="${bm.boardName}"/>
+		    </c:if>
+		  </c:forEach>
+		</c:if>
 	    
     	<div class="page-header">
 			<h1><c:out value="${boardName}"/></h1>

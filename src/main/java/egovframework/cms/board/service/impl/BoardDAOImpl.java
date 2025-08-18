@@ -144,4 +144,21 @@ public class BoardDAOImpl implements BoardDAO {
         p.put("limit", limit);
         return sqlSession.selectList(namespace + ".selectRecentWithFileCount", p);
     }
+	
+	//내가쓴글
+	@Override
+    public int selectBoardListCntByAuthor(SearchVO searchVO, String authorUuid) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("search", searchVO);
+        param.put("authorUuid", authorUuid);
+        return sqlSession.selectOne(namespace + ".getBoardListCntByAuthor", param);
+    }
+
+    @Override
+    public List<BoardVO> selectBoardListByAuthor(SearchVO searchVO, String authorUuid) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("search", searchVO);
+        param.put("authorUuid", authorUuid);
+        return sqlSession.selectList(namespace + ".getBoardListByAuthor", param);
+    }
 }

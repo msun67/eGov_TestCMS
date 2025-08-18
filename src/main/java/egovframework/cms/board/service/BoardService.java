@@ -21,4 +21,7 @@ public interface BoardService {
     List<BoardVO> findRecentByBoardCode(String boardCode, int limit);
     int countTodayPosts();
     List<BoardVO> findRecentWithFileCount(int limit);
+    //내가쓴글
+    int getBoardListCntByAuthor(SearchVO searchVO, String authorUuid); 
+    List<BoardVO> getBoardListByAuthor(SearchVO searchVO, String authorUuid);
 }

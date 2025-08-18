@@ -1,6 +1,5 @@
 package egovframework.cms.board.service.impl;
 import java.util.List;
-
 import egovframework.cms.board.service.BoardMasterVO;
 
 public interface BoardMasterDAO {

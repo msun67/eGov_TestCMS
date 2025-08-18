@@ -52,4 +52,9 @@ public interface BoardDAO {
 	List<BoardVO> selectRecentByBoardCode(String boardCode, int limit);
 	int countTodayPosts();
 	List<BoardVO> selectRecentWithFileCount(int limit);
+	// 내가쓴글
+	int selectBoardListCntByAuthor(@Param("search") SearchVO searchVO,
+            @Param("authorUuid") String authorUuid);
+	List<BoardVO> selectBoardListByAuthor(@Param("search") SearchVO searchVO,
+	                   @Param("authorUuid") String authorUuid);
 }

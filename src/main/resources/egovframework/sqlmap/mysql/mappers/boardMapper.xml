@@ -267,6 +267,80 @@
 	    ORDER BY p.created_at DESC
 	    LIMIT #{limit}
   </select>
+  
+  <!-- ✅ 내가 쓴 글: 목록 -->
+<select id="getBoardListByAuthor"
+        resultMap="BoardResultMap"
+        parameterType="map">
+  SELECT b.*,
+         IFNULL(COUNT(f.file_id), 0) AS file_count
+  FROM board_post b
+  LEFT JOIN board_file f
+    ON b.board_id = f.board_id
+   AND f.is_deleted = FALSE
+  WHERE b.is_deleted = FALSE
+
+  <if test="search.boardCode != null and search.boardCode != ''">
+    AND b.board_code = #{search.boardCode}
+  </if>
+
+  <!-- 핵심: 작성자 필터 -->
+  AND b.user_uuid = #{authorUuid}
+
+  <if test="search.keyword != null and search.keyword != ''">
+    AND (
+      <choose>
+        <when test="search.condition == 'title'">
+          b.board_title LIKE CONCAT('%', #{search.keyword}, '%')
+        </when>
+        <when test="search.condition == 'content'">
+          b.board_content LIKE CONCAT('%', #{search.keyword}, '%')
+        </when>
+        <otherwise>
+          b.board_title LIKE CONCAT('%', #{search.keyword}, '%')
+          OR b.board_content LIKE CONCAT('%', #{search.keyword}, '%')
+        </otherwise>
+      </choose>
+    )
+  </if>
+
+  GROUP BY b.board_id
+  ORDER BY b.created_at DESC
+  LIMIT #{search.offset}, #{search.size}
+</select>
+
+<!-- ✅ 내가 쓴 글: 카운트 -->
+<select id="getBoardListCntByAuthor"
+        resultType="int"
+        parameterType="map">
+  SELECT COUNT(1)
+  FROM board_post b
+  WHERE b.is_deleted = FALSE
+
+  <if test="search.boardCode != null and search.boardCode != ''">
+    AND b.board_code = #{search.boardCode}
+  </if>
+
+  <!-- 핵심: 작성자 필터 -->
+  AND b.user_uuid = #{authorUuid}
+
+  <if test="search.keyword != null and search.keyword != ''">
+    AND (
+      <choose>
+        <when test="search.condition == 'title'">
+          b.board_title LIKE CONCAT('%', #{search.keyword}, '%')
+        </when>
+        <when test="search.condition == 'content'">
+          b.board_content LIKE CONCAT('%', #{search.keyword}, '%')
+        </when>
+        <otherwise>
+          b.board_title LIKE CONCAT('%', #{search.keyword}, '%')
+          OR b.board_content LIKE CONCAT('%', #{search.keyword}, '%')
+        </otherwise>
+      </choose>
+    )
+  </if>
+</select>
     
     
 </mapper>

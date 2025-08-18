@@ -310,6 +310,9 @@
 	        <li class="menu-item ${fn:contains(requestURI, '/board.do') ? 'active' : ''}">
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
 	        </li>
+	        <li class="menu-item ${fn:contains(requestURI, '/posts.do') ? 'active' : ''}">
+	           <a href="<c:url value=''/>">📚 내가 쓴 글</a>
+	        </li>
 	    </ul>
 	
 	    <!-- 관리자 전용 메뉴 -->

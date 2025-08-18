@@ -108,5 +108,15 @@ public class BoardServiceImpl implements BoardService{
     public List<BoardVO> findRecentWithFileCount(int limit) {
         return boardDAO.selectRecentWithFileCount(limit);
     }
+    //내가쓴글
+    @Override
+    public int getBoardListCntByAuthor(SearchVO searchVO, String authorUuid) {
+        return boardDAO.selectBoardListCntByAuthor(searchVO, authorUuid);
+    }
+
+    @Override
+    public List<BoardVO> getBoardListByAuthor(SearchVO searchVO, String authorUuid) {
+        return boardDAO.selectBoardListByAuthor(searchVO, authorUuid);
+    }
     
 }
