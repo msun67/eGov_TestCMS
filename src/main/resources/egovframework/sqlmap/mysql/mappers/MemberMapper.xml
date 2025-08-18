@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.cms.member.service.impl.MemberMapper">
+
+<!-- 결과 매핑: SignupVO -->
+  <resultMap id="SignupResultMap" type="egovframework.cms.member.vo.SignupVO">
+    <id     property="userNo"       column="user_no"/>
+    <result property="userUuid"     column="user_uuid"/>
+    <result property="userId"       column="user_id"/>
+    <result property="password"     column="password"/>
+    <result property="name"         column="name"/>
+    <result property="userType"     column="user_type"/>
+    <result property="phone"        column="phone"/>
+    <result property="mobile"       column="mobile"/>
+    <result property="address"      column="address"/>
+    <result property="residence"    column="residence"/>
+    <result property="signupIp"     column="signup_ip"/>
+
+    <!-- 목록 표시용 -->
+    <result property="signupDate"   column="signup_date"/>
+    <result property="lastModified" column="last_modified"/>
+    <result property="lastLogin"    column="last_login"/>
+    <result property="loginStatus"  column="login_status"/>
+    <result property="loginIp"      column="login_ip"/>
+  </resultMap>
+
+  <!-- 회원 목록 -->
+  <select id="getUserList"
+          parameterType="egovframework.cms.member.vo.MemberSearchVO"
+          resultMap="SignupResultMap">
+    SELECT
+      d.user_no,
+      d.user_uuid,
+      d.user_type,
+      d.user_id,
+      d.password,
+      d.`name`,
+      d.phone,
+      d.mobile,
+      d.address,
+      d.residence,
+      d.signup_ip,
+      DATE_FORMAT(d.signup_date,   '%Y-%m-%d %H:%i:%s') AS signup_date,
+      DATE_FORMAT(d.last_modified, '%Y-%m-%d %H:%i:%s') AS last_modified,
+      DATE_FORMAT(u.last_login,    '%Y-%m-%d %H:%i:%s') AS last_login,
+      u.login_status,
+      u.login_ip
+    FROM user_details d
+    JOIN users u
+      ON u.user_no = d.user_no   <!-- 두 테이블 FK 일치 -->
+    WHERE 1=1
+
+      <if test="userType != null">
+        AND d.user_type = #{userType}
+      </if>
+
+      <if test="keyword != null and keyword != ''">
+        AND (
+          <choose>
+            <when test="condition == 'id'">
+              d.user_id LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="condition == 'name'">
+              d.name LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="condition == 'mobile'">
+              d.mobile LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+              d.user_id LIKE CONCAT('%', #{keyword}, '%')
+              OR d.name LIKE CONCAT('%', #{keyword}, '%')
+              OR d.mobile LIKE CONCAT('%', #{keyword}, '%')
+            </otherwise>
+          </choose>
+        )
+      </if>
+
+    ORDER BY d.signup_date DESC
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <!-- 카운트 -->
+  <select id="getUserListCnt"
+          parameterType="egovframework.cms.member.vo.MemberSearchVO"
+          resultType="int">
+    SELECT COUNT(1)
+    FROM user_details d
+    JOIN users u
+      ON u.user_no = d.user_no
+    WHERE 1=1
+      <if test="userType != null">
+        AND d.user_type = #{userType}
+      </if>
+      <if test="keyword != null and keyword != ''">
+        AND (
+          <choose>
+            <when test="condition == 'id'">
+              d.user_id LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="condition == 'name'">
+              d.name LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="condition == 'mobile'">
+              d.mobile LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+              d.user_id LIKE CONCAT('%', #{keyword}, '%')
+              OR d.name LIKE CONCAT('%', #{keyword}, '%')
+              OR d.mobile LIKE CONCAT('%', #{keyword}, '%')
+            </otherwise>
+          </choose>
+        )
+      </if>
+  </select>
+
+
+</mapper>

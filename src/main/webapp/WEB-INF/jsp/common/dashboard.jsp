@@ -43,8 +43,8 @@
 	            <li class="menu-item ${fn:contains(requestURI, '/admin/boardMaster/create.do') ? 'active' : ''}">
 	                <a href="<c:url value='/admin/boardMaster/create.do'/>">👑 게시판 생성</a>
 	            </li>
-	            <li class="menu-item ${fn:contains(requestURI, '/admin/userList.do') ? 'active' : ''}">
-	                <a href="<c:url value=''/>">🧑‍🤝‍🧑 사용자 관리</a>
+	            <li class="menu-item ${fn:contains(requestURI, '/admin/member/userList.do') ? 'active' : ''}">
+	                <a href="<c:url value='/admin/member/userList.do'/>">🧑‍🤝‍🧑 사용자 관리</a>
 	            </li>
 	        </ul>
 	    </sec:authorize>
