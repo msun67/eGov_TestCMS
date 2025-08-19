@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,10 +92,15 @@
 	            <button type="submit">검색</button>        
 	        </form>
         </div>
-
+        
         <!-- 게시글 목록 테이블 -->
+        <!-- 1줄: 좌측 요약 -->
+		<div class="board-summary">
+		   총 <strong><fmt:formatNumber value="${totalCnt}" type="number"/></strong>건
+		</div>
+			  
         <div class="table-wrap">
-	        <table class="table">
+	        <table class="table" style="margin-top:5px;">
 		        <colgroup>
 					<col style="width: 80px">    <!-- 번호 -->
 					<col>                        <!-- 제목 -->

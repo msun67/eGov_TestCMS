@@ -21,5 +21,17 @@ public class MemberServiceImpl {
     public int getUserListCnt(MemberSearchVO searchVO) {
         return memberMapper.getUserListCnt(searchVO);
     }
+    
+    public List<SignupVO> getUserListExcel(MemberSearchVO searchVO) {
+        return memberMapper.getUserListExcel(searchVO);
+    }
+    
+    public SignupVO getUserByUuid(String userUuid){
+        return memberMapper.selectUserByUuid(userUuid);
+    }
+
+    public void adminUpdateUser(String userUuid, Integer userType, String encodedPw, String mobile){
+        memberMapper.updateUserForAdmin(userUuid, userType, encodedPw, mobile);
+    }
 
 }

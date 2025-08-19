@@ -42,7 +42,7 @@
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/posts.do') ? 'active' : ''}">
-	           <a href="<c:url value=''/>">📚 내가 쓴 글</a>
+	           <a href="<c:url value='/posts.do'/>">📚 내가 쓴 글</a>
 	        </li>
 	    </ul>
 	
@@ -54,7 +54,7 @@
 	                <a href="<c:url value='/admin/boardMaster/create.do'/>">👑 게시판 생성</a>
 	            </li>
 	            <li class="menu-item ${fn:contains(requestURI, '/admin/userList.do') ? 'active' : ''}">
-	                <a href="<c:url value=''/>">🧑‍🤝‍🧑 사용자 관리</a>
+	                <a href="<c:url value='/admin/member/userList.do'/>">🧑‍🤝‍🧑 사용자 관리</a>
 	            </li>
 	        </ul>
 	    </sec:authorize>

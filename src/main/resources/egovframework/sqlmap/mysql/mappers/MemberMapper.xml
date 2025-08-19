@@ -79,7 +79,7 @@
     LIMIT #{offset}, #{size}
   </select>
 
-  <!-- 카운트 -->
+  <!-- 페이징/카운트 -->
   <select id="getUserListCnt"
           parameterType="egovframework.cms.member.vo.MemberSearchVO"
           resultType="int">
@@ -112,6 +112,62 @@
         )
       </if>
   </select>
+  
+  <!-- 엑셀로내보내기 --> 
+  <select id="getUserListExcel"
+        parameterType="egovframework.cms.member.vo.MemberSearchVO"
+        resultMap="SignupResultMap">
+  SELECT
+    d.user_no, d.user_uuid, d.user_type, d.user_id, d.password, d.`name`,
+    d.phone, d.mobile, d.address, d.residence, d.signup_ip,
+    DATE_FORMAT(d.signup_date,   '%Y-%m-%d %H:%i:%s') AS signup_date,
+    DATE_FORMAT(d.last_modified, '%Y-%m-%d %H:%i:%s') AS last_modified,
+    DATE_FORMAT(u.last_login,    '%Y-%m-%d %H:%i:%s') AS last_login,
+    u.login_status, u.login_ip
+  FROM user_details d
+  JOIN users u ON u.user_no = d.user_no
+  WHERE 1=1
+    <if test="userType != null"> AND d.user_type = #{userType} </if>
+    <if test="keyword != null and keyword != ''">
+      AND (
+        <choose>
+          <when test="condition == 'id'">     d.user_id  LIKE CONCAT('%', #{keyword}, '%')</when>
+          <when test="condition == 'name'">   d.name     LIKE CONCAT('%', #{keyword}, '%')</when>
+          <when test="condition == 'mobile'"> d.mobile   LIKE CONCAT('%', #{keyword}, '%')</when>
+          <otherwise>
+            d.user_id LIKE CONCAT('%', #{keyword}, '%')
+            OR d.name   LIKE CONCAT('%', #{keyword}, '%')
+            OR d.mobile LIKE CONCAT('%', #{keyword}, '%')
+          </otherwise>
+        </choose>
+      )
+    </if>
+  ORDER BY d.signup_date DESC
+</select>
 
+<!-- 상세 -->
+<select id="selectUserByUuid" parameterType="string"
+        resultType="egovframework.cms.member.vo.SignupVO">
+  SELECT d.user_no AS userNo, d.user_uuid AS userUuid, d.user_id AS userId,
+         d.name, d.user_type AS userType, d.mobile,
+         u.login_status AS loginStatus,
+         DATE_FORMAT(u.last_login, '%Y-%m-%d %H:%i:%s') AS lastLogin
+  FROM user_details d
+  JOIN users u ON u.user_no = d.user_no
+  WHERE d.user_uuid = #{userUuid}
+  LIMIT 1
+</select>
+
+<!-- 부분 수정 -->
+<update id="updateUserForAdmin">
+  UPDATE user_details
+     <set>
+       <if test="userType != null"> user_type = #{userType}, </if>
+       <if test="mobile != null">   mobile    = #{mobile}, </if>
+       <if test="password != null"> password  = #{password}, </if>
+       last_modified = NOW()
+     </set>
+  WHERE user_uuid = #{userUuid}
+</update>
 
 </mapper>

@@ -35,11 +35,13 @@
   .kv:last-child{border-bottom:0}
   .key{color:var(--muted); font-weight: 600;}
   .val{color:#111827}
-  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;border-radius:999px;background:var(--chip-bg);color:var(--chip);border:1px solid #a7f3d0}
-  .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:10px;border:1px solid var(--bd);background:#fff;cursor:pointer}
-  .btn.primary{background:var(--pri);color:#fff;border-color:var(--pri)}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;border-radius:999px;background:var(--chip-bg);color:var(--chip);border:1px solid #a7f3d0;transition: background-color 0.2s ease;}
+  .btn-post{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:10px;border:1px solid var(--bd);background:#fff;cursor:pointer;transition: background-color 0.2s ease;}
+  .btn-post:hover{background:#e5e7eb}
+  .btn.primary{font-size: 14px; color: white; border: 1px solid #007bff; border-radius: 4px; transition: background-color 0.2s ease; background-color: #007bff; padding: 6px 10px;}
+  .btn.primary:hover{background-color: white; color: #007bff;}
   .btn.ghost{border: 1px solid #e5e7eb; background: #fff; padding: 3px 10px; border-radius: 999px; cursor: pointer; text-decoration: none; margin-left:5px;font-size: 13px;}
-  .btn.ghost:hover{background: #f9fafb;}
+  .btn.ghost:hover{background: #e5e7eb;}
   label{display:block;font-weight:600;margin:12px 0 6px}
   input[type=text],input[type=tel],input[type=password],textarea{
     width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:#fff;box-sizing: border-box;
@@ -81,7 +83,7 @@
 	            <a href="<c:url value='/board.do'/>">📝 게시판</a>
 	        </li>
 	        <li class="menu-item ${fn:contains(requestURI, '/posts.do') ? 'active' : ''}">
-	           <a href="<c:url value=''/>">📚 내가 쓴 글</a>
+	           <a href="<c:url value='/posts.do'/>">📚 내가 쓴 글</a>
 	        </li>
 	    </ul>
 	
@@ -93,7 +95,7 @@
 	                <a href="<c:url value='/admin/boardMaster/create.do'/>">👑 게시판 생성</a>
 	            </li>
 	            <li class="menu-item ${fn:contains(requestURI, '/admin/userList.do') ? 'active' : ''}">
-	                <a href="<c:url value=''/>">🧑‍🤝‍🧑 사용자 관리</a>
+	                <a href="<c:url value='/admin/member/userList.do'/>">🧑‍🤝‍🧑 사용자 관리</a>
 	            </li>
 	        </ul>
 	    </sec:authorize>
@@ -201,7 +203,7 @@
 						  <input type="text" id="zip" placeholder="우편번호" readonly>
 						</div>
 						<div>
-						  <button type="button" class="btn" id="btnPostcode">주소검색</button>
+						  <button type="button" class="btn-post" id="btnPostcode">주소검색</button>
 						</div>
 						</div>
 						<input type="text" id="roadAddr" placeholder="도로명주소" readonly>
