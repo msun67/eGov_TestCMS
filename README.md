@@ -36,7 +36,3 @@
 | 로그인 | 게시판 | 메인 | 관리자페이지 |
 |--------|--------|------|--------------|
 | ![](./screenshots/login.png) | ![](./screenshots/board.png) | ![](./screenshots/main.png) | ![](./screenshots/admin.png) |
-
----
-
-## 📦 프로젝트 구조
