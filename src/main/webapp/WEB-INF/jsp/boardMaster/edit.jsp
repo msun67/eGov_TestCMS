@@ -101,12 +101,12 @@
         }
     </script>
 </head>
+<%@ include file="/WEB-INF/jsp/include/topmenu.jsp"%>
 <body>
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
-		<%@ include file="/WEB-INF/jsp/include/topmenu.jsp"%>
 		<!-- layout-container  -->
 		<div class="layout-container">
-			<%@ include file="/WEB-INF/jsp/include/leftmenu.jsp"%>
+			<%@ include file="/WEB-INF/jsp/include/main_leftmenu.jsp"%>
 			<div class="main-content">
 
 				<div class="bm-container">

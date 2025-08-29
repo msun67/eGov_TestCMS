@@ -96,8 +96,8 @@
 		<form action="${pageContext.request.contextPath}/loginProcess.do" method="post">
 			<!-- ✅ CSRF 토큰 추가 -->
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-			<label><input type="radio" name="userType" value="ROLE_ADMIN"> 관리자</label>
-			<label><input type="radio" name="userType" value="ROLE_USER" checked> 일반 사용자</label>
+			<label><input type="radio" name="userType" value="ROLE_ADMIN" checked> 관리자</label>
+			<label><input type="radio" name="userType" value="ROLE_USER"> 일반 사용자</label>
   			<label><input type="radio" name="userType" value="ROLE_ORG"> 부서원</label>
 			
 			<input type="text" name="username" id="userId" placeholder="아이디" required/><br/>

@@ -40,7 +40,7 @@ public class CustomSecurityHandler
         flashMap.put("warningMessage", "🔒 권한이 없습니다.");
 
         // 2) 리다이렉트 타깃 경로 지정
-        String targetPath = "/board.do"; // 컨텍스트 경로 없이 애플리케이션 내부 경로
+        String targetPath = "/dashboard.do"; // 컨텍스트 경로 없이 애플리케이션 내부 경로
         flashMap.setTargetRequestPath(targetPath);
 
         // 3) FlashMap 저장
